@@ -28,5 +28,5 @@ export type TeamMember = {
   role: string;
   instagram?: string;
   description: string;
-  image: string;
+  image: string | null;
 }
