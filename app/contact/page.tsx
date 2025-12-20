@@ -1,6 +1,6 @@
 "use client"
 
-import  React{ useState  } from "react";
+import  { useState  } from "react";
 import { Mail, MapPin, Instagram, Send, X } from "lucide-react";
 import { AnimatedSection } from "@/components/animations/animated-section";
 import ContactLinkItem from "@/components/contact-link-item";
