@@ -1,11 +1,9 @@
 "use client"
 
-import  { useState  } from "react";
-import { Mail, MapPin, Instagram, Send, X } from "lucide-react";
+import { useState } from "react";
+import { Mail, Instagram, Send, Phone, X as XIcon } from "lucide-react";
 import { AnimatedSection } from "@/components/animations/animated-section";
 import ContactLinkItem from "@/components/contact-link-item";
-import { SiX } from "react-icons/si";
-import { IoCall } from "react-icons/io5";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -155,8 +153,8 @@ export default function Contact() {
             <div className="flex flex-row justify-between items-center">
               <ContactLinkItem title="Email" icon={<Mail className="w-6 h-6 text-blue-600" />} content="admin@steadfasthaven.com" href="mailto:admin@steadfasthaven.com" />
               <ContactLinkItem title="Instagram" icon={<Instagram className="w-6 h-6 text-blue-600" />} content="@thesfhaven" href="https://instagram.com/thesfhaven" />
-              <ContactLinkItem title="Phone call" icon={<IoCall className="w-6 h-6 text-blue-600"/>} content="+19016022176" href="https://x.com/steadfasthaven1"/>
-              <ContactLinkItem title="X Platform" icon={<SiX className="w-6 h-6 text-blue-600"/>} content="@steadfasthaven1" href="https://x.com/steadfasthaven1"/>
+              <ContactLinkItem title="Phone call" icon={<Phone className="w-6 h-6 text-blue-600"/>} content="+19016022176" href="tel:+19016022176"/>
+              <ContactLinkItem title="X Platform" icon={<XIcon className="w-6 h-6 text-blue-600"/>} content="@steadfasthaven1" href="https://x.com/steadfasthaven1"/>
             </div>
           </AnimatedSection>
 

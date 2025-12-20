@@ -1,7 +1,7 @@
 import { Project } from '@/types';
 import React, { useState } from 'react'
 import { AnimatedWorkSection } from './animations/animated-work-section';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, Film, Music, Palette } from 'lucide-react';
 
 export const portfolioData = [
   {
