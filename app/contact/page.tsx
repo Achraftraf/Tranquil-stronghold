@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react";
+import  React{ useState  } from "react";
 import { Mail, MapPin, Instagram, Send, X } from "lucide-react";
 import { AnimatedSection } from "@/components/animations/animated-section";
 import ContactLinkItem from "@/components/contact-link-item";
@@ -15,9 +15,9 @@ export default function Contact() {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
@@ -46,7 +46,7 @@ export default function Contact() {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -76,7 +76,7 @@ export default function Contact() {
                     {submitStatus?.message}
                   </div>
                 )}
-            <div className="w-full bg-white h-full border border-gray-300 p-8">
+            <form onSubmit={handleSubmit} className="w-full bg-white h-full border border-gray-300 p-8">
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-10">
                   <div>
@@ -140,7 +140,7 @@ export default function Contact() {
                 </div>
 
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   disabled={isSubmitting}
                   className="w-full bg-blue-500 text-white py-4 font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all inline-flex items-center justify-center gap-2"
                 >
@@ -148,7 +148,7 @@ export default function Contact() {
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </div>
-            </div>
+            </form>
           </AnimatedSection>
 
           <AnimatedSection delay={0.3} classNames="w-full mx-auto">
