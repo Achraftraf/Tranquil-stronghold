@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Filter, X } from "lucide-react";
 import { AnimatedSection } from "@/components/animations/animated-section";
 import { EventCard } from "@/components/event-card";
+import { EventCardSkeleton } from "@/components/event-card-skeleton";
 import { FeaturedEvent } from "@/components/featured-event"; // Remove eventsData import
 import { getEvents } from "@/lib/strapi"; // Import Event type
 import { Event } from "@/types";
@@ -51,7 +52,7 @@ export default function Events() {
       </AnimatedSection>
 
       {/* Featured Event */}
-      {featuredEvent && (
+      {!loading && featuredEvent && (
         <div className="w-full mx-auto px-6 py-8">
           <FeaturedEvent event={featuredEvent} />
         </div>
@@ -93,10 +94,18 @@ export default function Events() {
 
       {/* Events Grid */}
       <div className="max-w-7xl mx-auto px-6 pb-8">
-        {filteredEvents.length > 0 ? (
+        {loading ? (
+          // Show skeletons while loading
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <EventCardSkeleton key={`skeleton-event-${index}`} index={index} />
+            ))}
+          </div>
+        ) : filteredEvents.length > 0 ? (
+          // Show actual events when loaded
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredEvents.map((event, index) => (
-              <EventCard key={event.id} event={event} index={index} loading={loading} />
+              <EventCard key={event.id} event={event} index={index} />
             ))}
           </div>
         ) : (

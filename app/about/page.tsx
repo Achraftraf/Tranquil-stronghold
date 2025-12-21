@@ -2,6 +2,7 @@
 
 import { AnimatedSection, AnimatedSectionH } from '@/components/animations/animated-section';
 import Member from '@/components/memeber';
+import MemberSkeleton from '@/components/member-skeleton';
 import { Heart, Film, Music, Users, Target, Mail, MapPin, CheckCircle2, Award, Lightbulb, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getTeamMembers } from '@/lib/strapi';
@@ -83,11 +84,17 @@ export default function About() {
       </AnimatedSection>
 
       <AnimatedSection delay={0.7} classNames='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 items-stretch gap-3 md:gap-6 lg:gap-12 px-2 py-6'>
-        {
+        {loading ? (
+          // Show skeletons while loading
+          Array.from({ length: 6 }).map((_, index) => (
+            <MemberSkeleton key={`skeleton-member-${index}`} />
+          ))
+        ) : (
+          // Show actual team members when loaded
           team.map((member: TeamMember, index: number) => (
             <Member key={index} id={index} name={member.name} instagram={member.instagram} role={member.role} description={member.description} image={member.image} />
           ))
-        }
+        )}
       </AnimatedSection>
 
       <AnimatedSection delay={0.8} classNames="">

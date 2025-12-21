@@ -3,8 +3,9 @@
 import { AnimatedSection, AnimatedSectionH } from "@/components/animations/animated-section";
 import { AnimatedContactInfoItem } from "@/components/animations/animated-contact-info";
 import Card from "@/components/card";
+import CardSkeleton from "@/components/card-skeleton";
 import Link from "next/link";
-import { FaDonate, FaSpinner } from "react-icons/fa";
+import { FaDonate } from "react-icons/fa";
 import { FiCalendar, FiHeart, FiUsers } from "react-icons/fi";
 import { IoChevronForward } from "react-icons/io5";
 import { PiPalette } from "react-icons/pi";
@@ -14,7 +15,6 @@ import FlyingRocket from "@/components/flying-rocket";
 import { RiTeamLine } from "react-icons/ri";
 import { GoArrowRight } from "react-icons/go";
 import { getHomeCards } from "@/lib/strapi";
-import { ImSpinner2 } from "react-icons/im";
 
 
 // Icon mapping
@@ -59,13 +59,9 @@ export default function Home() {
   const topCards = cards.filter(card => card.cardId <= 2);
   const bottomCards = cards.filter(card => card.cardId > 2);
 
-  if (loading) {
-    return (
-      <div className="w-full min-h-screen flex items-center justify-center">
-        <ImSpinner2 className="text-3xl text-blue-500 animate-spin" />
-      </div>
-    );
-  }
+  // Use default skeleton counts when loading (2 top, 2 bottom)
+  const topSkeletonCount = 2;
+  const bottomSkeletonCount = 2;
 
   return (
     <section className="w-full flex-1 min-h-0 flex flex-col items-center justify-start bg-white text-black">
@@ -143,18 +139,27 @@ export default function Home() {
         </AnimatedSection>
 
         <div className="w-full md:max-w-5xl mx-auto grid grid-cols-1 gap-8 lg:gap-14 px-2 md:px-8 py-2 md:py-6 lg:py-8 lg:px-14 my-2 lg:my-6">
-
-          {topCards.map((card, index) => (
-            <AnimatedContactInfoItem key={card.id} delay={0.4 + index * 0.2}>
-              <Card
-                id={card.cardId}
-                title={card.title}
-                desc={card.description}
-                icon={iconMap[card.icon] || FiCalendar}
-                left={index % 2 == 0}
-              />
-            </AnimatedContactInfoItem>
-          ))}
+          {loading ? (
+            // Show skeletons while loading
+            Array.from({ length: topSkeletonCount }).map((_, index) => (
+              <AnimatedContactInfoItem key={`skeleton-top-${index}`} delay={0.4 + index * 0.2}>
+                <CardSkeleton left={index % 2 === 0} />
+              </AnimatedContactInfoItem>
+            ))
+          ) : (
+            // Show actual cards when loaded
+            topCards.map((card, index) => (
+              <AnimatedContactInfoItem key={card.id} delay={0.4 + index * 0.2}>
+                <Card
+                  id={card.cardId}
+                  title={card.title}
+                  desc={card.description}
+                  icon={iconMap[card.icon] || FiCalendar}
+                  left={index % 2 == 0}
+                />
+              </AnimatedContactInfoItem>
+            ))
+          )}
         </div>
       </AnimatedSectionH>
 
@@ -163,17 +168,27 @@ export default function Home() {
         classNames="w-full overflow-hidden bg-white rounded-b-[23rem] md:rounded-b-[20rem]  lg:rounded-b-[90%] border-b border-b-neutral-300 px-8 pb-8 mb-8 text-center"
       >
         <div className="w-full md:max-w-5xl mx-auto grid grid-cols-1 gap-8 lg:gap-14 px-2 md:px-8 pb-8 lg:px-14 my-8">
-          {bottomCards.map((card, index) => (
-            <AnimatedContactInfoItem key={card.id} delay={0.6 + index * 0.2}>
-              <Card
-                id={card.cardId}
-                title={card.title}
-                desc={card.description}
-                icon={iconMap[card.icon] || FiCalendar}
-                left={index % 2 == 0}
-              />
-            </AnimatedContactInfoItem>
-          ))}
+          {loading ? (
+            // Show skeletons while loading
+            Array.from({ length: bottomSkeletonCount }).map((_, index) => (
+              <AnimatedContactInfoItem key={`skeleton-bottom-${index}`} delay={0.6 + index * 0.2}>
+                <CardSkeleton left={index % 2 === 0} />
+              </AnimatedContactInfoItem>
+            ))
+          ) : (
+            // Show actual cards when loaded
+            bottomCards.map((card, index) => (
+              <AnimatedContactInfoItem key={card.id} delay={0.6 + index * 0.2}>
+                <Card
+                  id={card.cardId}
+                  title={card.title}
+                  desc={card.description}
+                  icon={iconMap[card.icon] || FiCalendar}
+                  left={index % 2 == 0}
+                />
+              </AnimatedContactInfoItem>
+            ))
+          )}
         </div>
         <a target="_blank" href={"/team"} className="inline-flex border border-neutral-300 items-center gap-2 bg-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-600 mb-6 hover:underline hover:underline-blue-500">
           <RiTeamLine className="w-4 h-4" />
