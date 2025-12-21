@@ -29,8 +29,8 @@ exports.handler = async (event, context) => {
     });
 
     const mailOptions = {
-      from: '"Contact Form" <alirhou7@gmail.com>',
-      to: 'alirhou7@gmail.com',
+      from: '"Contact Form" <systemtestbookstore@gmail.com>',
+      to: 'systemtestbookstore@gmail.com',
       replyTo: email,
       subject: `New Contact Form Message from ${name} ${lastName}`,
       html: `
