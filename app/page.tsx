@@ -4,7 +4,7 @@ import { AnimatedSection, AnimatedSectionH } from "@/components/animations/anima
 import { AnimatedContactInfoItem } from "@/components/animations/animated-contact-info";
 import Card from "@/components/card";
 import Link from "next/link";
-import { FaDonate, FaSpinner } from "react-icons/fa";
+import { FaDonate } from "react-icons/fa";
 import { FiCalendar, FiHeart, FiUsers } from "react-icons/fi";
 import { IoChevronForward } from "react-icons/io5";
 import { PiPalette } from "react-icons/pi";
@@ -15,6 +15,7 @@ import { RiTeamLine } from "react-icons/ri";
 import { GoArrowRight } from "react-icons/go";
 import { getHomeCards } from "@/lib/strapi";
 import { ImSpinner2 } from "react-icons/im";
+import ParticlesContainer from "@/components/ParticlesContainer";
 
 
 // Icon mapping
@@ -68,7 +69,10 @@ export default function Home() {
   }
 
   return (
-    <section className="w-full flex-1 min-h-0 flex flex-col items-center justify-start bg-white text-black">
+    <section className="relative w-full flex-1 min-h-0 flex flex-col items-center justify-start bg-white text-black">
+      {/* Particles background - fixed position across entire viewport */}
+      <ParticlesContainer style={{ zIndex: 1 }} />
+      
       {showRocket && (
         <FlyingRocket
           onCatch={() => {
@@ -82,7 +86,7 @@ export default function Home() {
           <SpaceAdventureGame handleClose={handleCloseGame} />
         )
       }
-      <div className='flex-1 min-h-0 mx-auto px-3 w-full flex flex-row items-center justify-center mb-4'>
+      <div className='relative z-10 flex-1 min-h-0 mx-auto px-3 w-full flex flex-row items-center justify-center mb-4'>
         <AnimatedSection
           delay={0.6}
           classNames="pt-14 pb-4 mb-12 w-full flex flex-col items-center text-center space-y-6"
@@ -125,7 +129,7 @@ export default function Home() {
       </div>
 
       <AnimatedSectionH
-        classNames="w-full min-h-screen overflow-hidden bg-white rounded-t-[23rem] md:rounded-t-[20rem]  lg:rounded-t-[90%] border-t border-t-neutral-300 p-8 pb-4 text-center"
+        classNames="relative z-10 w-full min-h-screen overflow-hidden bg-white rounded-t-[23rem] md:rounded-t-[20rem]  lg:rounded-t-[90%] border-t border-t-neutral-300 p-8 pb-4 text-center"
       >
         <AnimatedSection delay={0.3} classNames="w-full px-6 py-2 bg-white">
           <a target="_blank" href={"https://givebutter.com/auElnc"} className="inline-flex border border-neutral-300 items-center gap-2 bg-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-600 mb-6 hover:underline hover:underline-blue-500">
@@ -160,7 +164,7 @@ export default function Home() {
 
 
       <AnimatedSectionH
-        classNames="w-full overflow-hidden bg-white rounded-b-[23rem] md:rounded-b-[20rem]  lg:rounded-b-[90%] border-b border-b-neutral-300 px-8 pb-8 mb-8 text-center"
+        classNames="relative z-10 w-full overflow-hidden bg-white rounded-b-[23rem] md:rounded-b-[20rem]  lg:rounded-b-[90%] border-b border-b-neutral-300 px-8 pb-8 mb-8 text-center"
       >
         <div className="w-full md:max-w-5xl mx-auto grid grid-cols-1 gap-8 lg:gap-14 px-2 md:px-8 pb-8 lg:px-14 my-8">
           {bottomCards.map((card, index) => (
@@ -181,7 +185,7 @@ export default function Home() {
         </a>
       </AnimatedSectionH>
 
-      <AnimatedSectionH delay={0.2} classNames="max-w-5xl mx-auto w-full px-6 bg-white">
+      <AnimatedSectionH delay={0.2} classNames="relative z-10 max-w-5xl mx-auto w-full px-6 bg-white">
         <div className="max-w-7xl mx-auto px-6 py-20">
           <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-12 text-center text-white">
             <h2 className="text-4xl font-bold mb-4">Want to Collaborate?</h2>
@@ -204,5 +208,3 @@ export default function Home() {
     </section >
   );
 }
-
-
