@@ -5,6 +5,7 @@ import { Play, Award } from "lucide-react";
 import { AnimatedWorkSection } from "@/components/animations/animated-work-section";
 import { Project } from "@/types";
 import { ProjectCard } from "@/components/project-card";
+import { ProjectCardSkeleton } from "@/components/project-card-skeleton";
 import { getProjects } from "@/lib/strapi";
 
 const FeaturedProject = ({ project }: { project: Project }) => {
@@ -146,10 +147,14 @@ export default function Work() {
       {/* Projects Grid */}
       <div className="max-w-7xl mx-auto px-6 pb-6">
         {loading ? (
-          <div className="text-center py-12 text-gray-500">
-            Loading projects...
+          // Show skeletons while loading
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <ProjectCardSkeleton key={`skeleton-project-${index}`} index={index} />
+            ))}
           </div>
         ) : filteredProjects.length > 0 ? (
+          // Show actual projects when loaded
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.map((project, index) => (
               <ProjectCard

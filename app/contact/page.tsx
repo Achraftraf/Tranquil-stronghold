@@ -74,7 +74,7 @@ export default function Contact() {
                     {submitStatus?.message}
                   </div>
                 )}
-            <form onSubmit={handleSubmit} className="w-full bg-white h-full border border-gray-300 p-8">
+            <form onSubmit={handleSubmit} className="w-full bg-white h-full border border-gray-300 py-8 px-10 rounded-lg">
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-10">
                   <div>
