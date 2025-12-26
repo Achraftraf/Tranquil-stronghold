@@ -34,3 +34,8 @@ const CardSkeleton: React.FC<CardSkeletonProps> = ({ left }) => {
 };
 
 export default CardSkeleton;
+
+
+
+
+
