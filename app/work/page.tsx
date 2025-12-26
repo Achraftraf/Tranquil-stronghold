@@ -182,12 +182,20 @@ export default function Work() {
               empowering Memphis youth through creative expression.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <button className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all shadow-lg">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all shadow-lg"
+              >
                 Get Involved
-              </button>
-              <button className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/10 transition-all">
+              </a>
+              <a
+                href="mailto:admin@steadfasthaven.org"
+                className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
+              >
                 Contact Us
-              </button>
+              </a>
             </div>
           </div>
         </div>

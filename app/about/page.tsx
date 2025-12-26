@@ -1,15 +1,16 @@
-"use client"
+"use client";
 
-import { AnimatedSection, AnimatedSectionH } from '@/components/animations/animated-section';
-import Member from '@/components/memeber';
-import MemberSkeleton from '@/components/member-skeleton';
-import { Heart, Film, Music, Users, Target, Mail, MapPin, CheckCircle2, Award, Lightbulb, Sparkles } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { getTeamMembers } from '@/lib/strapi';
-import { TeamMember } from '@/types';
-import { ImpactCard } from '@/components/impact-card';
-
-
+import {
+  AnimatedSection,
+  AnimatedSectionH,
+} from "@/components/animations/animated-section";
+import Member from "@/components/memeber";
+import MemberSkeleton from "@/components/member-skeleton";
+import { Heart, Film, Users, Mail, Award } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getTeamMembers } from "@/lib/strapi";
+import { TeamMember } from "@/types";
+import { ImpactCard } from "@/components/impact-card";
 
 export default function About() {
   const [team, setTeam] = useState<TeamMember[]>([]);
@@ -20,18 +21,17 @@ export default function About() {
       try {
         const data = await getTeamMembers();
 
-        console.log('Fetched team data:', data)
+        console.log("Fetched team data:", data);
         setTeam(data);
       } catch (error) {
-        console.error('Error fetching team data:', error);
-      } finally { setLoading(false); }
+        console.error("Error fetching team data:", error);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    loadTeam()
+    loadTeam();
   }, []);
-
-
-
 
   return (
     <section className="w-full min-h-screen bg-white text-black max-w-5xl mx-auto p-10  space-y-18">
@@ -40,7 +40,8 @@ export default function About() {
           About Steadfast Haven
         </h1>
         <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-          Empowering Memphis youth to tell their stories and build their futures through creative expression.
+          Empowering Memphis youth to tell their stories and build their futures
+          through creative expression.
         </p>
       </AnimatedSection>
 
@@ -56,9 +57,10 @@ export default function About() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Who We Are</h2>
             <p className="text-lg text-gray-200 leading-relaxed mb-6 max-w-3xl">
-              Steadfast Haven is a Memphis-based 501(c)(3) nonprofit that empowers underserved youth
-              through art, film, and music. We offer safe creative spaces for young people to tell their
-              stories, develop real-world skills, and drive community change.
+              Steadfast Haven is a Memphis-based 501(c)(3) nonprofit that
+              empowers underserved youth through art, film, and music. We offer
+              safe creative spaces for young people to tell their stories,
+              develop real-world skills, and drive community change.
             </p>
             <div className="grid grid-cols-2 gap-6 pt-4">
               <div>
@@ -74,54 +76,84 @@ export default function About() {
         </div>
       </AnimatedSection>
 
-
       <AnimatedSection delay={0.6} classNames="text-center">
         <h2 className="text-4xl font-bold mb-3 text-gray-900">Meet Our Team</h2>
         <p className="text-lg text-gray-600 max-w-4xl mx-auto">
-          Steadfast Haven is led by a passionate and mission-driven team committed to creating lasting
-          impact through strategic leadership, clear communication, and strong community connections.
+          Steadfast Haven is led by a passionate and mission-driven team
+          committed to creating lasting impact through strategic leadership,
+          clear communication, and strong community connections.
         </p>
       </AnimatedSection>
 
-      <AnimatedSection delay={0.7} classNames='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 items-stretch gap-3 md:gap-6 lg:gap-12 px-2 py-6'>
-        {loading ? (
-          // Show skeletons while loading
-          Array.from({ length: 6 }).map((_, index) => (
-            <MemberSkeleton key={`skeleton-member-${index}`} />
-          ))
-        ) : (
-          // Show actual team members when loaded
-          team.map((member: TeamMember, index: number) => (
-            <Member key={index} id={index} name={member.name} instagram={member.instagram} role={member.role} description={member.description} image={member.image} />
-          ))
-        )}
+      <AnimatedSection
+        delay={0.7}
+        classNames="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 items-stretch gap-3 md:gap-6 lg:gap-12 px-2 py-6"
+      >
+        {loading
+          ? // Show skeletons while loading
+            Array.from({ length: 6 }).map((_, index) => (
+              <MemberSkeleton key={`skeleton-member-${index}`} />
+            ))
+          : // Show actual team members when loaded
+            team.map((member: TeamMember, index: number) => (
+              <Member
+                key={index}
+                id={index}
+                name={member.name}
+                instagram={member.instagram}
+                role={member.role}
+                description={member.description}
+                image={member.image}
+              />
+            ))}
       </AnimatedSection>
 
       <AnimatedSection delay={0.8} classNames="">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold mb-3 text-gray-900">Our Impact</h2>
-          <p className="text-lg text-gray-600">Making a real difference in the Memphis community</p>
+          <p className="text-lg text-gray-600">
+            Making a real difference in the Memphis community
+          </p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <ImpactCard icon={Users} stat="200+" label="Youth Empowered" index={0} />
-          <ImpactCard icon={Film} stat="50+" label="Projects Created" index={1} />
+          <ImpactCard
+            icon={Users}
+            stat="200+"
+            label="Youth Empowered"
+            index={0}
+          />
+          <ImpactCard
+            icon={Film}
+            stat="50+"
+            label="Projects Created"
+            index={1}
+          />
           <ImpactCard icon={Award} stat="15+" label="Events Hosted" index={2} />
-          <ImpactCard icon={Heart} stat="10K+" label="Lives Touched" index={3} />
+          <ImpactCard
+            icon={Heart}
+            stat="10K+"
+            label="Lives Touched"
+            index={3}
+          />
         </div>
       </AnimatedSection>
 
-      <AnimatedSectionH delay={0.9} classNames="max-w-5xl mx-auto w-full bg-white">
+      <AnimatedSectionH
+        delay={0.9}
+        classNames="max-w-5xl mx-auto w-full bg-white"
+      >
         <div className="max-w-7xl mx-auto pb-12">
           <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-12 text-center text-white">
             <h2 className="text-4xl font-bold mb-4">Want to get Involved?</h2>
             <p className="text-xl mb-8 text-blue-50 max-w-2xl mx-auto">
-              Your support helps us empower Memphis youth to create, grow, and thrive through art, film, and music.
+              Your support helps us empower Memphis youth to create, grow, and
+              thrive through art, film, and music.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
               <a
-                href="mailto:angeloperryjr@gmail.com"
+                href="mailto:admin@steadfasthaven.org"
                 className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-all shadow-lg inline-flex items-center gap-2"
               >
                 <Mail className="w-5 h-5" />
