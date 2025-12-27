@@ -72,176 +72,174 @@ export default function Home() {
 
       <div className="relative z-10 w-full flex-1 min-h-0 flex flex-col items-center justify-start">
         {showRocket && (
-          <FlyingRocket
-            onCatch={() => {
-              setShowRocket(false);
-              setPlay(true);
-            }}
-          />
-        )}
-        {play && <SpaceAdventureGame handleClose={handleCloseGame} />}
-        
-        <div className="flex-1 min-h-0 mx-auto px-3 w-full flex flex-row items-center justify-center mb-4">
-          <AnimatedSection
-            delay={0.6}
-            classNames="pt-14 pb-4 mb-12 w-full flex flex-col items-center text-center space-y-6"
-          >
-            <h2 className="text-5xl md:text-6xl font-bold tracking-tight max-w-4xl">
-              Empowering Youth Through
-              <br />
-              Art, Film & Music
-            </h2>
-            <div className="flex items-center gap-4 mt-4">
-              <Link
-                href="/team"
-                className="text-xl px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition border-2 border-blue-500"
-              >
-                Join Us
-              </Link>
-              <Link
-                href="/about"
-                className="group relative text-xl px-6 py-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition"
-              >
-                Learn More
-                <IoChevronForward
-                  className="
-        inline-block ml-2 mb-[3px] 
-        transition-all duration-300
-        group-hover:opacity-0 group-hover:translate-x-1
-      "
-                />
-                <GoArrowRight
-                  className="
-        inline-block size-6  -ml-4  absolute top-0 bottom-0 m-auto
-        opacity-0 translate-x-[-4px]
-        transition-all duration-700
-        group-hover:opacity-100 group-hover:translate-x-0
-      "
-                />
-              </Link>
-            </div>
-          </AnimatedSection>
-        </div>
-
-        <AnimatedSectionH classNames="w-full min-h-screen overflow-hidden bg-white rounded-t-[23rem] md:rounded-t-[20rem]  lg:rounded-t-[90%] border-t border-t-neutral-300 p-8 pb-4 text-center">
-          <AnimatedSection delay={0.3} classNames="w-full px-6 py-2 bg-white">
-            <a
-              target="_blank"
-              href={"https://givebutter.com/auElnc"}
-              className="inline-flex border border-neutral-300 items-center gap-2 bg-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-600 mb-6 hover:underline hover:underline-blue-500"
+        <FlyingRocket
+          onCatch={() => {
+            setShowRocket(false);
+            setPlay(true);
+          }}
+        />
+      )}
+      {play && <SpaceAdventureGame handleClose={handleCloseGame} />}
+      <div className="flex-1 min-h-0 mx-auto px-3 w-full flex flex-row items-center justify-center mb-4">
+        <AnimatedSection
+          delay={0.6}
+          classNames="pt-14 pb-4 mb-12 w-full flex flex-col items-center text-center space-y-6"
+        >
+          <h2 className="text-5xl md:text-6xl font-bold tracking-tight max-w-4xl">
+            Empowering Youth Through
+            <br />
+            Art, Film & Music
+          </h2>
+          <div className="flex items-center gap-4 mt-4">
+            <Link
+              href="/events"
+              className="text-xl px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition border-2 border-blue-500"
             >
-              <FaDonate className="w-4 h-4" />
-              Donate
-            </a>
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-4xl font-semibold mb-3">Our Mission</h2>
-              <p className="text-xl text-gray-700 leading-relaxed">
-                Steadfast Haven is a Memphis-based nonprofit empowering youth
-                through creative freedom. We provide safe spaces where young
-                people can learn, create, and share their stories — and discover a
-                future they believe in.
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <div className="w-full md:max-w-5xl mx-auto grid grid-cols-1 gap-8 lg:gap-14 px-2 md:px-8 py-2 md:py-6 lg:py-8 lg:px-14 my-2 lg:my-6">
-            {loading
-              ? // Show skeletons while loading
-                Array.from({ length: topSkeletonCount }).map((_, index) => (
-                  <AnimatedContactInfoItem
-                    key={`skeleton-top-${index}`}
-                    delay={0.4 + index * 0.2}
-                  >
-                    <CardSkeleton left={index % 2 === 0} />
-                  </AnimatedContactInfoItem>
-                ))
-              : // Show actual cards when loaded
-                topCards.map((card, index) => (
-                  <AnimatedContactInfoItem
-                    key={card.id}
-                    delay={0.4 + index * 0.2}
-                  >
-                    <Card
-                      id={card.cardId}
-                      title={card.title}
-                      desc={card.description}
-                      icon={iconMap[card.icon] || FiCalendar}
-                      left={index % 2 == 0}
-                    />
-                  </AnimatedContactInfoItem>
-                ))}
+              Join Us
+            </Link>
+            <Link
+              href="/about"
+              className="group relative text-xl px-6 py-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition"
+            >
+              Learn More
+              <IoChevronForward
+                className="
+      inline-block ml-2 mb-[3px] 
+      transition-all duration-300
+      group-hover:opacity-0 group-hover:translate-x-1
+    "
+              />
+              <GoArrowRight
+                className="
+      inline-block size-6  -ml-4  absolute top-0 bottom-0 m-auto
+      opacity-0 translate-x-[-4px]
+      transition-all duration-700
+      group-hover:opacity-100 group-hover:translate-x-0
+    "
+              />
+            </Link>
           </div>
-        </AnimatedSectionH>
+        </AnimatedSection>
+      </div>
 
-        <AnimatedSectionH classNames="w-full overflow-hidden bg-white rounded-b-[23rem] md:rounded-b-[20rem]  lg:rounded-b-[90%] border-b border-b-neutral-300 px-8 pb-8 mb-8 text-center">
-          <div className="w-full md:max-w-5xl mx-auto grid grid-cols-1 gap-8 lg:gap-14 px-2 md:px-8 pb-8 lg:px-14 my-8">
-            {loading
-              ? // Show skeletons while loading
-                Array.from({ length: bottomSkeletonCount }).map((_, index) => (
-                  <AnimatedContactInfoItem
-                    key={`skeleton-bottom-${index}`}
-                    delay={0.6 + index * 0.2}
-                  >
-                    <CardSkeleton left={index % 2 === 0} />
-                  </AnimatedContactInfoItem>
-                ))
-              : // Show actual cards when loaded
-                bottomCards.map((card, index) => (
-                  <AnimatedContactInfoItem
-                    key={card.id}
-                    delay={0.6 + index * 0.2}
-                  >
-                    <Card
-                      id={card.cardId}
-                      title={card.title}
-                      desc={card.description}
-                      icon={iconMap[card.icon] || FiCalendar}
-                      left={index % 2 == 0}
-                    />
-                  </AnimatedContactInfoItem>
-                ))}
-          </div>
+      <AnimatedSectionH classNames="w-full min-h-screen overflow-hidden bg-white rounded-t-[23rem] md:rounded-t-[20rem]  lg:rounded-t-[90%] border-t border-t-neutral-300 p-8 pb-4 text-center">
+        <AnimatedSection delay={0.3} classNames="w-full px-6 py-2 bg-white">
           <a
             target="_blank"
-            href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
-            rel="noopener noreferrer"
+            href={"https://givebutter.com/auElnc"}
             className="inline-flex border border-neutral-300 items-center gap-2 bg-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-600 mb-6 hover:underline hover:underline-blue-500"
           >
-            <RiTeamLine className="w-4 h-4" />
-            Join our Team
+            <FaDonate className="w-4 h-4" />
+            Donate
           </a>
-        </AnimatedSectionH>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-4xl font-semibold mb-3">Our Mission</h2>
+            <p className="text-xl text-gray-700 leading-relaxed">
+              Steadfast Haven is a Memphis-based nonprofit empowering youth
+              through creative freedom. We provide safe spaces where young
+              people can learn, create, and share their stories — and discover a
+              future they believe in.
+            </p>
+          </div>
+        </AnimatedSection>
 
-        <AnimatedSectionH
-          delay={0.2}
-          classNames="max-w-5xl mx-auto w-full px-6 bg-white"
+        <div className="w-full md:max-w-5xl mx-auto grid grid-cols-1 gap-8 lg:gap-14 px-2 md:px-8 py-2 md:py-6 lg:py-8 lg:px-14 my-2 lg:my-6">
+          {loading
+            ? // Show skeletons while loading
+              Array.from({ length: topSkeletonCount }).map((_, index) => (
+                <AnimatedContactInfoItem
+                  key={`skeleton-top-${index}`}
+                  delay={0.4 + index * 0.2}
+                >
+                  <CardSkeleton left={index % 2 === 0} />
+                </AnimatedContactInfoItem>
+              ))
+            : // Show actual cards when loaded
+              topCards.map((card, index) => (
+                <AnimatedContactInfoItem
+                  key={card.id}
+                  delay={0.4 + index * 0.2}
+                >
+                  <Card
+                    id={card.cardId}
+                    title={card.title}
+                    desc={card.description}
+                    icon={iconMap[card.icon] || FiCalendar}
+                    left={index % 2 == 0}
+                  />
+                </AnimatedContactInfoItem>
+              ))}
+        </div>
+      </AnimatedSectionH>
+
+      <AnimatedSectionH classNames="w-full overflow-hidden bg-white rounded-b-[23rem] md:rounded-b-[20rem]  lg:rounded-b-[90%] border-b border-b-neutral-300 px-8 pb-8 mb-8 text-center">
+        <div className="w-full md:max-w-5xl mx-auto grid grid-cols-1 gap-8 lg:gap-14 px-2 md:px-8 pb-8 lg:px-14 my-8">
+          {loading
+            ? // Show skeletons while loading
+              Array.from({ length: bottomSkeletonCount }).map((_, index) => (
+                <AnimatedContactInfoItem
+                  key={`skeleton-bottom-${index}`}
+                  delay={0.6 + index * 0.2}
+                >
+                  <CardSkeleton left={index % 2 === 0} />
+                </AnimatedContactInfoItem>
+              ))
+            : // Show actual cards when loaded
+              bottomCards.map((card, index) => (
+                <AnimatedContactInfoItem
+                  key={card.id}
+                  delay={0.6 + index * 0.2}
+                >
+                  <Card
+                    id={card.cardId}
+                    title={card.title}
+                    desc={card.description}
+                    icon={iconMap[card.icon] || FiCalendar}
+                    left={index % 2 == 0}
+                  />
+                </AnimatedContactInfoItem>
+              ))}
+        </div>
+        <a
+          href="/about#team"
+          rel="noopener noreferrer"
+          className="inline-flex border border-neutral-300 items-center gap-2 bg-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-600 mb-6 hover:underline hover:underline-blue-500"
         >
-          <div className="max-w-7xl mx-auto px-6 py-20">
-            <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-12 text-center text-white">
-              <h2 className="text-4xl font-bold mb-4">Want to Collaborate?</h2>
-              <p className="text-xl mb-8 text-blue-50 max-w-2xl mx-auto">
-                We're always looking for partners, mentors, and supporters who
-                believe in empowering Memphis youth through creative expression.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center">
-                <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all"
-                >
-                  Get Involved
-                </a>
-                <a
-                  href="mailto:admin@steadfasthaven.org"
-                  className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
-                >
-                  Contact Us
-                </a>
-              </div>
+          <RiTeamLine className="w-4 h-4" />
+          Meet our Team
+        </a>
+      </AnimatedSectionH>
+
+      <AnimatedSectionH
+        delay={0.2}
+        classNames="max-w-5xl mx-auto w-full px-6 bg-white"
+      >
+        <div className="max-w-7xl mx-auto px-6 py-20">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-12 text-center text-white">
+            <h2 className="text-4xl font-bold mb-4">Want to Collaborate?</h2>
+            <p className="text-xl mb-8 text-blue-50 max-w-2xl mx-auto">
+              We're always looking for partners, mentors, and supporters who
+              believe in empowering Memphis youth through creative expression.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all"
+              >
+                Get Involved
+              </a>
+              <a
+                href="/contact"
+                className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
+              >
+                Contact Us
+              </a>
             </div>
           </div>
-        </AnimatedSectionH>
+        </div>
+      </AnimatedSectionH>
       </div>
     </section>
   );

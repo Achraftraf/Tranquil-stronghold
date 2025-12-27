@@ -87,6 +87,7 @@ export default function About() {
 
       <AnimatedSection
         delay={0.7}
+        id="team"
         classNames="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 items-stretch gap-3 md:gap-6 lg:gap-12 px-2 py-6"
       >
         {loading
@@ -139,7 +140,7 @@ export default function About() {
         </div>
       </AnimatedSection>
 
-      <AnimatedSectionH
+      <AnimatedSection
         delay={0.9}
         classNames="max-w-5xl mx-auto w-full bg-white"
       >
@@ -171,7 +172,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </AnimatedSectionH>
+      </AnimatedSection>
     </section>
   );
 }
