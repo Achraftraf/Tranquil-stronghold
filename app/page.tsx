@@ -87,7 +87,7 @@ export default function Home() {
           </h2>
           <div className="flex items-center gap-4 mt-4">
             <Link
-              href="/team"
+              href="/events"
               className="text-xl px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition border-2 border-blue-500"
             >
               Join Us
@@ -196,13 +196,12 @@ export default function Home() {
               ))}
         </div>
         <a
-          target="_blank"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
+          href="/about#team"
           rel="noopener noreferrer"
           className="inline-flex border border-neutral-300 items-center gap-2 bg-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-600 mb-6 hover:underline hover:underline-blue-500"
         >
           <RiTeamLine className="w-4 h-4" />
-          Join our Team
+          Meet our Team
         </a>
       </AnimatedSectionH>
 
@@ -227,7 +226,7 @@ export default function Home() {
                 Get Involved
               </a>
               <a
-                href="mailto:admin@steadfasthaven.org"
+                href="/contact"
                 className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/10 transition-all"
               >
                 Contact Us
