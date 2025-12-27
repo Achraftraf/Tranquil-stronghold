@@ -30,7 +30,11 @@ type Particle = {
   color: string;
 };
 
-export default function SpaceAdventureGame({ handleClose }: { handleClose: () => void }) {
+interface SpaceAdventureGameProps {
+  handleClose?: () => void;
+}
+
+export default function SpaceAdventureGame({ handleClose }: SpaceAdventureGameProps) {
   const [positionX, setPositionX] = useState(50);
   const [positionY, setPositionY] = useState(80);
   const [score, setScore] = useState(0);
@@ -50,23 +54,38 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
   const [slowMo, setSlowMo] = useState(false);
   const [magnet, setMagnet] = useState(false);
   const [shakeScreen, setShakeScreen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const keysPressed = useRef<Set<string>>(new Set());
+  const touchPosition = useRef<{ x: number; y: number } | null>(null);
   const mousePosition = useRef<{ x: number; y: number } | null>(null);
   const isMouseActive = useRef<boolean>(false);
+  const isTouchActive = useRef<boolean>(false);
   const gameAreaRef = useRef<HTMLDivElement | null>(null);
   const lastShootTime = useRef<number>(0);
-  const shootCooldown = 200; // milliseconds between shots
+  const autoShootInterval = useRef<NodeJS.Timeout | null>(null);
 
   const gameWidth = 100;
   const gameHeight = 100;
   const playerSize = 6;
-  const moveSpeed = 1.7; // Slower speed for comfortable arrow key control
-  const mouseSmoothing = 0.2; // Smoothing factor for mouse movement
+  const moveSpeed = isMobile ? 2.5 : 1.7;
+  const inputSmoothing = isMobile ? 0.15 : 0.2;
+  const shootCooldown = isMobile ? 150 : 200;
 
-  const createParticles = (x: number, y: number, color: string, count: number = 10) => {
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const createParticles = useCallback((x: number, y: number, color: string, count: number = 10) => {
+    const particleCount = isMobile ? Math.floor(count * 0.6) : count;
     const newParticles: Particle[] = [];
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < particleCount; i++) {
       newParticles.push({
         id: Math.random(),
         x,
@@ -78,9 +97,9 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
       });
     }
     setParticles(prev => [...prev, ...newParticles]);
-  };
+  }, [isMobile]);
 
-  const shootBullet = () => {
+  const shootBullet = useCallback(() => {
     const now = Date.now();
     if (now - lastShootTime.current < shootCooldown) return;
     
@@ -91,7 +110,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
       y: positionY - 2
     }]);
     createParticles(positionX + playerSize / 2, positionY, "#60a5fa", 5);
-  };
+  }, [positionX, positionY, shootCooldown, createParticles]);
 
   const generateStar = useCallback(() => ({
     id: Math.random(),
@@ -125,6 +144,60 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
     };
   }, [slowMo]);
 
+  // Touch controls
+  useEffect(() => {
+    if (!gameStarted || gameOver || !isMobile) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      isTouchActive.current = true;
+      isMouseActive.current = false;
+      
+      if (autoShootInterval.current) clearInterval(autoShootInterval.current);
+      autoShootInterval.current = setInterval(shootBullet, shootCooldown);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      if (!gameAreaRef.current || e.touches.length === 0) return;
+      
+      const touch = e.touches[0];
+      const rect = gameAreaRef.current.getBoundingClientRect();
+      const touchX = ((touch.clientX - rect.left) / rect.width) * 100;
+      const touchY = ((touch.clientY - rect.top) / rect.height) * 100;
+      
+      touchPosition.current = { 
+        x: Math.max(2, Math.min(gameWidth - playerSize - 2, touchX - playerSize / 2)), 
+        y: Math.max(2, Math.min(gameHeight - playerSize - 2, touchY - playerSize / 2))
+      };
+    };
+
+    const handleTouchEnd = () => {
+      touchPosition.current = null;
+      isTouchActive.current = false;
+      if (autoShootInterval.current) {
+        clearInterval(autoShootInterval.current);
+        autoShootInterval.current = null;
+      }
+    };
+
+    const gameArea = gameAreaRef.current;
+    if (gameArea) {
+      gameArea.addEventListener('touchstart', handleTouchStart, { passive: false });
+      gameArea.addEventListener('touchmove', handleTouchMove, { passive: false });
+      gameArea.addEventListener('touchend', handleTouchEnd);
+      gameArea.addEventListener('touchcancel', handleTouchEnd);
+      
+      return () => {
+        gameArea.removeEventListener('touchstart', handleTouchStart);
+        gameArea.removeEventListener('touchmove', handleTouchMove);
+        gameArea.removeEventListener('touchend', handleTouchEnd);
+        gameArea.removeEventListener('touchcancel', handleTouchEnd);
+        if (autoShootInterval.current) clearInterval(autoShootInterval.current);
+      };
+    }
+  }, [gameStarted, gameOver, isMobile, shootBullet, shootCooldown]);
+
   // Keyboard controls
   useEffect(() => {
     if (!gameStarted || gameOver) return;
@@ -134,9 +207,9 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
       if (["arrowleft", "arrowright", "arrowup", "arrowdown"].includes(key)) {
         e.preventDefault();
         keysPressed.current.add(key);
-        isMouseActive.current = false; // Disable mouse when keyboard is used
+        isMouseActive.current = false;
+        isTouchActive.current = false;
       }
-      // Shoot with spacebar
       if (key === " " || key === "spacebar") {
         e.preventDefault();
         shootBullet();
@@ -154,11 +227,11 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [gameStarted, gameOver, positionX, positionY]);
+  }, [gameStarted, gameOver, shootBullet]);
 
-  // Mouse movement - smoothed for better control
+  // Mouse controls
   useEffect(() => {
-    if (!gameStarted || gameOver) return;
+    if (!gameStarted || gameOver || isMobile) return;
 
     const onMouseMove = (e: MouseEvent) => {
       if (!gameAreaRef.current) return;
@@ -166,8 +239,8 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
       const mouseX = ((e.clientX - rect.left) / rect.width) * 100;
       const mouseY = ((e.clientY - rect.top) / rect.height) * 100;
       
-      // Store mouse position and mark mouse as active
       isMouseActive.current = true;
+      isTouchActive.current = false;
       mousePosition.current = { 
         x: Math.max(2, Math.min(gameWidth - playerSize - 2, mouseX - playerSize / 2)), 
         y: Math.max(2, Math.min(gameHeight - playerSize - 2, mouseY - playerSize / 2))
@@ -194,55 +267,56 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
         gameArea.removeEventListener("click", onClick);
       };
     }
-  }, [gameStarted, gameOver, positionX, positionY]);
+  }, [gameStarted, gameOver, isMobile, shootBullet]);
 
   // Main game loop
   useEffect(() => {
     if (!gameStarted || gameOver) return;
 
     const interval = setInterval(() => {
-      // Handle movement (keyboard and mouse)
       setPositionX(prev => {
-        // Keyboard movement (prioritized when not using mouse)
-        if (!isMouseActive.current && keysPressed.current.size > 0) {
+        if (!isTouchActive.current && !isMouseActive.current && keysPressed.current.size > 0) {
           let x = prev;
           if (keysPressed.current.has("arrowleft")) x = Math.max(2, prev - moveSpeed);
           if (keysPressed.current.has("arrowright")) x = Math.min(gameWidth - playerSize - 2, prev + moveSpeed);
           return x;
         }
         
-        // Mouse movement with smoothing
+        if (isTouchActive.current && touchPosition.current !== null) {
+          return prev + (touchPosition.current.x - prev) * inputSmoothing;
+        }
+        
         if (isMouseActive.current && mousePosition.current !== null) {
-          return prev + (mousePosition.current.x - prev) * mouseSmoothing;
+          return prev + (mousePosition.current.x - prev) * inputSmoothing;
         }
         
         return prev;
       });
 
       setPositionY(prev => {
-        // Keyboard movement (prioritized when not using mouse)
-        if (!isMouseActive.current && keysPressed.current.size > 0) {
+        if (!isTouchActive.current && !isMouseActive.current && keysPressed.current.size > 0) {
           let y = prev;
           if (keysPressed.current.has("arrowup")) y = Math.max(2, prev - moveSpeed);
           if (keysPressed.current.has("arrowdown")) y = Math.min(gameHeight - playerSize - 2, prev + moveSpeed);
           return y;
         }
         
-        // Mouse movement with smoothing
+        if (isTouchActive.current && touchPosition.current !== null) {
+          return prev + (touchPosition.current.y - prev) * inputSmoothing;
+        }
+        
         if (isMouseActive.current && mousePosition.current !== null) {
-          return prev + (mousePosition.current.y - prev) * mouseSmoothing;
+          return prev + (mousePosition.current.y - prev) * inputSmoothing;
         }
         
         return prev;
       });
 
-      // Update particles
       setParticles(prev =>
         prev.map(p => ({ ...p, x: p.x + p.vx, y: p.y + p.vy, life: p.life - 0.02 }))
             .filter(p => p.life > 0)
       );
 
-      // Update bullets
       setBullets(prev => prev
         .map(b => ({ ...b, y: b.y - 3 }))
         .filter(b => b.y > -5)
@@ -303,7 +377,6 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
         let hit = false;
         let destroyedIds = new Set<number>();
 
-        // Check bullet collisions with obstacles
         bullets.forEach(bullet => {
           prev.forEach(o => {
             const bulletHit = Math.abs(bullet.x - o.x) < 4 && Math.abs(bullet.y - o.y) < 4;
@@ -358,7 +431,8 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
     return () => clearInterval(interval);
   }, [
     gameStarted, gameOver, positionX, positionY, level, combo,
-    shield, magnet, slowMo, score, highScore, bullets,
+    shield, magnet, slowMo, score, highScore, bullets, isMobile,
+    moveSpeed, inputSmoothing, createParticles,
     generateStar, generateObstacle, generateGem, generatePowerUp
   ]);
 
@@ -382,370 +456,336 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose: () =>
     setMagnet(false);
     keysPressed.current.clear();
     mousePosition.current = null;
+    touchPosition.current = null;
     isMouseActive.current = false;
+    isTouchActive.current = false;
   };
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md p-4 animate-fadeIn select-none"
-      onClick={handleClose}
-    >
-      <div 
-        className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden animate-slideUp select-none"
-        onClick={(e) => e.stopPropagation()}
-      >
-      
-        {/* HEADER */}
-        <div className="bg-gradient-to-r from-slate-50 to-gray-50 border-b border-gray-200 p-6">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 flex items-center gap-3">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
-                  <Rocket className="w-10 h-10 text-blue-600 relative" />
-                </div>
-                Space Adventure
-              </h1>
-              <p className="text-gray-500 text-sm mt-1 font-medium">
-                Arrow Keys + Mouse Control
-              </p>
-            </div>
+    <div
+  className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-md p-2 sm:p-4 select-none"
+  style={{
+    paddingTop: '70px',
+  }}
+>
+      <div className="w-full max-w-5xl h-[90vh] sm:h-[85vh] bg-white border border-gray-200 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+        
+        {/* Header */}
+        <div className="flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 bg-gradient-to-r from-slate-50 to-gray-50">
+          <div className="flex items-center gap-2">
+            <Rocket className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+              <span className="hidden sm:inline">Space Adventure</span>
+              <span className="sm:hidden">Space</span>
+            </h2>
+          </div>
+          {handleClose && (
+            <button
+              onClick={handleClose}
+              className="p-1.5 sm:p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition-all"
+            >
+              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          )}
+        </div>
 
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent mb-1">
-                  {score}
-                </div>
-                <div className="text-gray-500 text-xs font-medium">Best: {highScore}</div>
-              </div>
-              <button
-                onClick={handleClose}
-                className="p-2 hover:bg-gray-100 rounded-full transition-all duration-200"
-              >
-                <X className="w-6 h-6 text-gray-600" />
-              </button>
+        {/* Stats Bar */}
+        <div className="flex flex-wrap gap-2 sm:gap-4 px-3 sm:px-6 py-2 sm:py-3 bg-gray-50 border-b border-gray-200 text-xs sm:text-sm">
+          <div className="flex items-center gap-1.5">
+            <Trophy className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500" />
+            <span className="text-gray-900 font-bold">{score}</span>
+          </div>
+          <div className="text-gray-600">
+            Best: <span className="text-blue-600 font-semibold">{highScore}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-gray-600">Level</span>
+            <span className="text-purple-600 font-bold">{level}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-red-500" />
+            <div className="flex gap-0.5 ml-1">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Heart
+                  key={i}
+                  className={`w-3 h-3 sm:w-4 sm:h-4 transition-all ${
+                    i < lives ? 'text-red-500 fill-red-500 animate-heartbeat' : 'text-gray-300'
+                  }`}
+                />
+              ))}
             </div>
           </div>
-
-          {/* STATS */}
-          <div className="grid grid-cols-4 gap-3">
-            <div className="bg-white border border-gray-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-200">
-              <div className="text-gray-500 text-xs mb-1 font-medium">Level</div>
-              <div className="text-2xl font-bold text-gray-900">{level}</div>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-200">
-              <div className="text-gray-500 text-xs mb-1 flex items-center gap-1 font-medium">
-                <Heart className="w-3 h-3" /> Lives
-              </div>
-              <div className="flex gap-1">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <Heart
-                    key={i}
-                    className={`w-5 h-5 transition-all duration-300 ${
-                      i < lives ? "text-red-500 fill-red-500 animate-heartbeat" : "text-gray-300"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-200">
-              <div className="text-gray-500 text-xs mb-1 flex items-center gap-1 font-medium">
-                <Flame className="w-3 h-3 text-orange-500" /> Combo
-              </div>
-              <div className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                x{combo}
-              </div>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-200">
-              <div className="text-gray-500 text-xs mb-1 font-medium">Power-Ups</div>
-              <div className="flex gap-2">
-                {shield && <Shield className="w-5 h-5 text-blue-500 fill-blue-500 animate-bounce" />}
-                {slowMo && <Zap className="w-5 h-5 text-yellow-500 animate-bounce" />}
-                {magnet && <Gem className="w-5 h-5 text-purple-500 animate-bounce" />}
-                {!shield && !slowMo && !magnet && (
-                  <span className="text-gray-400 text-xs">None</span>
-                )}
-              </div>
+          <div className="flex items-center gap-1.5">
+            <Flame className="w-3 h-3 sm:w-4 sm:h-4 text-orange-500" />
+            <span className="text-gray-600">Combo</span>
+            <span className="text-orange-600 font-bold">x{combo}</span>
+          </div>
+          <div className="flex items-center gap-1.5 ml-auto">
+            <span className="text-gray-600 text-xs hidden sm:inline">Power-Ups:</span>
+            <div className="flex gap-1">
+              {shield && <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500 fill-blue-500 animate-bounce" />}
+              {slowMo && <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-500 animate-bounce" />}
+              {magnet && <Gem className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 animate-bounce" />}
+              {!shield && !slowMo && !magnet && (
+                <span className="text-gray-400 text-xs">None</span>
+              )}
             </div>
           </div>
         </div>
 
-        {/* GAME AREA */}
-        <div className="relative">
+        {/* Game Area */}
+        <div className="flex-1 relative overflow-hidden bg-gradient-to-b from-blue-50 via-white to-purple-50">
           {!gameStarted ? (
-            <div className="bg-gradient-to-b from-slate-50 via-white to-gray-50 p-16 text-center" style={{ height: "600px" }}>
-              <div className="flex flex-col items-center justify-center h-full">
-                <div className="relative mb-8">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-violet-500/30 rounded-full blur-3xl animate-pulse"></div>
-                  <Rocket className="w-32 h-32 text-blue-600 relative animate-float" />
-                </div>
-                
-                <h2 className="text-5xl text-gray-900 font-bold mb-4 animate-fadeIn">Ready to Play?</h2>
-
-                <p className="text-gray-600 mb-8 max-w-md mx-auto font-medium leading-relaxed">
-                  Control your ship using
-                  <br />
-                  <strong className="text-blue-600">🖱 Mouse Movement</strong>
-                  {' or '}
-                  <strong className="text-violet-600">⬆ ⬇ ⬅ ➡ Arrow Keys</strong>
-                  <br />
-                  <strong className="text-orange-600">Click or Spacebar to Shoot</strong>
-                </p>
-
-                <button
-                  onClick={startGame}
-                  className="group bg-gradient-to-r from-blue-600 to-violet-600 text-white px-12 py-4 rounded-full text-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                >
-                  <Play className="inline w-6 h-6 mr-2 group-hover:translate-x-1 transition-transform" />
-                  Start Game
-                </button>
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-4">
+              <div className="relative mb-6 sm:mb-8">
+                <div className="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl animate-pulse"></div>
+                <Rocket className="w-16 h-16 sm:w-20 sm:h-20 text-blue-600 relative animate-bounce" />
               </div>
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Ready to Play?</h3>
+              <div className="text-center text-gray-700 mb-6 sm:mb-8 space-y-2 text-xs sm:text-sm max-w-md px-4">
+                {isMobile ? (
+                  <>
+                    <p>
+                      <span className="text-blue-600 font-semibold">👆 Touch & drag</span> to move
+                    </p>
+                    <p className="text-gray-600">
+                      <span className="text-orange-600 font-semibold">Auto-shoots</span> while touching
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      Control your ship using <span className="text-blue-600 font-semibold">🖱 Mouse</span>{' '}
+                      <span className="text-gray-500">or</span>{' '}
+                      <span className="text-purple-600 font-semibold">⬆ ⬇ ⬅ ➡ Arrow Keys</span>
+                    </p>
+                    <p className="text-gray-600">
+                      <span className="text-orange-600 font-semibold">Click</span> or{' '}
+                      <span className="text-orange-600 font-semibold">Spacebar</span> to Shoot
+                    </p>
+                  </>
+                )}
+              </div>
+              <button
+                onClick={startGame}
+                className="px-6 sm:px-8 py-3 sm:py-4 rounded-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white font-bold text-base sm:text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2"
+              >
+                <Play className="w-4 h-4 sm:w-5 sm:h-5" />
+                Start Game
+              </button>
             </div>
           ) : (
             <div
               ref={gameAreaRef}
-              className={`relative bg-gradient-to-b from-slate-50 via-white to-gray-50 overflow-hidden select-none ${
-                shakeScreen ? "animate-shake" : ""
+              className={`relative w-full h-full bg-gradient-to-b from-blue-50 via-white to-purple-50 cursor-crosshair ${
+                shakeScreen ? 'animate-shake' : ''
               }`}
-              style={{ height: "600px", userSelect: 'none', WebkitUserSelect: 'none' }}
+              style={{ userSelect: 'none', touchAction: 'none' }}
             >
-
-              {/* particles */}
+              {/* Particles */}
               {particles.map(p => (
                 <div
                   key={p.id}
-                  className="absolute rounded-full animate-fadeOut"
+                  className="absolute rounded-full pointer-events-none"
                   style={{
                     left: `${p.x}%`,
                     top: `${p.y}%`,
-                    width: "8px",
-                    height: "8px",
+                    width: isMobile ? "6px" : "8px",
+                    height: isMobile ? "6px" : "8px",
                     backgroundColor: p.color,
                     opacity: p.life * 0.8,
-                    boxShadow: `0 0 16px ${p.color}`,
+                    boxShadow: `0 0 ${isMobile ? '12px' : '16px'} ${p.color}`,
                   }}
                 />
               ))}
 
-              {/* stars */}
+              {/* Stars */}
               {stars.map(s => (
                 <Star
                   key={s.id}
-                  className="absolute text-gray-300 fill-gray-300 animate-twinkle"
+                  className="absolute text-gray-400 fill-gray-400 animate-twinkle pointer-events-none"
                   style={{
                     left: `${s.x}%`,
                     top: `${s.y}%`,
-                    width: "12px",
-                    height: "12px",
+                    width: isMobile ? "10px" : "12px",
+                    height: isMobile ? "10px" : "12px",
                   }}
                 />
               ))}
 
-              {/* gems */}
+              {/* Gems */}
               {gems.map(g => (
                 <Gem
                   key={g.id}
-                  className="absolute text-blue-500 animate-float"
+                  className="absolute text-blue-500 animate-pulse pointer-events-none"
                   style={{
                     left: `${g.x}%`,
                     top: `${g.y}%`,
-                    width: "28px",
-                    height: "28px",
-                    filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.5))',
+                    width: isMobile ? "20px" : "24px",
+                    height: isMobile ? "20px" : "24px",
+                    filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.6))',
                   }}
                 />
               ))}
 
-              {/* bullets */}
+              {/* Bullets */}
               {bullets.map(b => (
                 <div
                   key={b.id}
-                  className="absolute bg-blue-400 rounded-full"
+                  className="absolute bg-blue-400 rounded-full pointer-events-none shadow-lg"
                   style={{
                     left: `${b.x}%`,
                     top: `${b.y}%`,
-                    width: "8px",
-                    height: "16px",
+                    width: isMobile ? "6px" : "8px",
+                    height: isMobile ? "14px" : "18px",
                     boxShadow: '0 0 12px rgba(96, 165, 250, 0.8)',
                   }}
                 />
               ))}
 
-              {/* power ups */}
+              {/* Power-ups */}
               {powerUps.map(p => (
                 <div
                   key={p.id}
-                  className="absolute animate-spin-slow"
+                  className="absolute rounded-full flex items-center justify-center animate-pulse pointer-events-none"
                   style={{
                     left: `${p.x}%`,
                     top: `${p.y}%`,
-                    width: "32px",
-                    height: "32px",
+                    width: isMobile ? "24px" : "28px",
+                    height: isMobile ? "24px" : "28px",
                   }}
                 >
                   {p.type === "shield" && (
-                    <Shield className="w-8 h-8 text-blue-500" style={{ filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.5))' }} />
+                    <Shield className="w-full h-full text-blue-500" style={{ filter: 'drop-shadow(0 0 8px rgba(59, 130, 246, 0.6))' }} />
                   )}
                   {p.type === "slowmo" && (
-                    <Zap className="w-8 h-8 text-yellow-500" style={{ filter: 'drop-shadow(0 0 8px rgba(234, 179, 8, 0.5))' }} />
+                    <Zap className="w-full h-full text-yellow-500" style={{ filter: 'drop-shadow(0 0 8px rgba(234, 179, 8, 0.6))' }} />
                   )}
                   {p.type === "magnet" && (
-                    <Trophy className="w-8 h-8 text-purple-500" style={{ filter: 'drop-shadow(0 0 8px rgba(168, 85, 247, 0.5))' }} />
+                    <Gem className="w-full h-full text-green-500" style={{ filter: 'drop-shadow(0 0 8px rgba(34, 197, 94, 0.6))' }} />
                   )}
                 </div>
               ))}
 
-              {/* obstacles */}
+              {/* Obstacles */}
               {obstacles.map(o => (
-                <Zap
+                <Flame
                   key={o.id}
-                  className="absolute text-red-500 fill-red-500 animate-pulse"
+                  className="absolute text-red-500 animate-pulse pointer-events-none"
                   style={{
                     left: `${o.x}%`,
                     top: `${o.y}%`,
-                    width: "36px",
-                    height: "36px",
+                    width: isMobile ? "28px" : "32px",
+                    height: isMobile ? "28px" : "32px",
                     filter: 'drop-shadow(0 0 12px rgba(239, 68, 68, 0.6))',
                   }}
                 />
               ))}
 
-              {/* PLAYER SHIP */}
+              {/* Player */}
               <div
-                className="absolute transition-all duration-75"
+                className="absolute transition-all duration-75 pointer-events-none"
                 style={{
                   left: `${positionX}%`,
                   top: `${positionY}%`,
-                  width: "52px",
-                  height: "52px",
+                  width: isMobile ? "48px" : "52px",
+                  height: isMobile ? "48px" : "52px",
                 }}
               >
                 {shield && (
                   <div 
-                    className="absolute rounded-full border-4 border-blue-500 opacity-60 animate-pulse"
-                    style={{ width: "70px", height: "70px", left: "-9px", top: "-9px" }}
+                    className="absolute inset-0 rounded-full border-4 border-blue-400 animate-ping opacity-60"
+                    style={{ 
+                      width: isMobile ? "60px" : "70px", 
+                      height: isMobile ? "60px" : "70px",
+                      left: isMobile ? "-6px" : "-9px",
+                      top: isMobile ? "-6px" : "-9px"
+                    }}
                   />
                 )}
-
-                <Rocket
-                  className="absolute text-blue-600 animate-float"
-                  style={{
-                    width: "52px",
-                    height: "52px",
-                    transform: "rotate(-45deg)",
-                    filter: "drop-shadow(0 0 20px rgba(59, 130, 246, 0.6))",
-                  }}
+                <Rocket 
+                  className="w-full h-full text-blue-600 drop-shadow-lg transform rotate-0" 
+                  style={{ filter: 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.6))' }}
                 />
               </div>
 
-              {/* GAME OVER */}
+              {/* Game Over Overlay */}
               {gameOver && (
-                <div className="absolute inset-0 bg-white/95 backdrop-blur-sm flex items-center justify-center animate-fadeIn">
-                  <div className="text-center bg-white p-12 rounded-3xl border-2 border-gray-200 shadow-2xl animate-slideUp">
-                    <div className="relative mb-6">
-                      <div className="absolute inset-0 bg-yellow-500/30 rounded-full blur-2xl animate-pulse"></div>
-                      <Trophy className="w-24 h-24 text-yellow-500 mx-auto relative" />
+                <div className="absolute inset-0 flex items-center justify-center bg-white/90 backdrop-blur-sm">
+                  <div className="bg-white border-2 border-gray-200 rounded-2xl sm:rounded-3xl p-6 sm:p-8 max-w-sm mx-4 text-center shadow-2xl">
+                    <div className="relative mb-4 sm:mb-6">
+                      <div className="absolute inset-0 bg-yellow-500/20 rounded-full blur-2xl animate-pulse"></div>
+                      <Trophy className="w-16 h-16 sm:w-20 sm:h-20 text-yellow-500 mx-auto relative" />
                     </div>
-                    
-                    <h3 className="text-6xl font-bold text-gray-900 mb-4">Game Over</h3>
-
-                    <p className="text-blue-600 text-3xl font-bold mb-2">Score: {score}</p>
-                    <p className="text-gray-600 text-xl mb-4 font-medium">Level: {level}</p>
-
-                    {score === highScore && score > 0 && (
-                      <p className="text-yellow-600 font-bold animate-bounce mb-4">🏆 NEW HIGH SCORE! 🏆</p>
-                    )}
-
+                    <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Game Over</h3>
+                    <div className="space-y-2 mb-4 sm:mb-6">
+                      <p className="text-gray-700">
+                        Score: <span className="text-blue-600 font-bold text-xl sm:text-2xl">{score}</span>
+                      </p>
+                      <p className="text-gray-700">
+                        Level: <span className="text-purple-600 font-bold text-lg">{level}</span>
+                      </p>
+                      {score === highScore && score > 0 && (
+                        <div className="mt-3 sm:mt-4 p-3 bg-yellow-50 border-2 border-yellow-400 rounded-lg">
+                          <p className="text-yellow-700 font-bold text-sm sm:text-base">🏆 NEW HIGH SCORE! 🏆</p>
+                        </div>
+                      )}
+                    </div>
                     <button
                       onClick={startGame}
-                      className="mt-6 bg-gradient-to-r from-blue-600 to-violet-600 text-white px-10 py-4 rounded-full text-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                      className="w-full px-6 py-3 sm:py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-base sm:text-lg hover:scale-105 transition-all flex items-center justify-center gap-2 shadow-lg"
                     >
+                      <Play className="w-4 h-4 sm:w-5 sm:h-5" />
                       Play Again
                     </button>
                   </div>
                 </div>
               )}
-
             </div>
           )}
         </div>
 
-        {/* CONTROL INFO */}
+        {/* Controls Help */}
         {gameStarted && !gameOver && (
-          <div className="bg-gradient-to-r from-slate-50 to-gray-50 border-t border-gray-200 p-4 text-center select-none">
-            <p className="text-gray-600 text-sm font-medium select-none">
-              Use <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded font-semibold">Arrow Keys</span>  
-              {' or '}
-              <span className="px-2 py-1 bg-violet-100 text-violet-700 rounded font-semibold">Mouse</span> to control
-              {' • '}
-              <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded font-semibold">Spacebar/Click</span> to shoot
-            </p>
+          <div className="px-3 sm:px-6 py-2 sm:py-3 bg-gray-50 border-t border-gray-200 text-center text-[10px] sm:text-xs text-gray-600">
+            {isMobile ? (
+              <>Touch & drag to move • Auto-shoots while touching</>
+            ) : (
+              <>
+                Use <span className="text-purple-600 font-semibold">Arrow Keys</span>{' '}
+                <span className="text-gray-400">or</span>{' '}
+                <span className="text-blue-600 font-semibold">Mouse</span> to control{' '}
+                <span className="text-gray-400">•</span>{' '}
+                <span className="text-orange-600 font-semibold">Spacebar/Click</span> to shoot
+              </>
+            )}
           </div>
         )}
-
       </div>
 
-      <style jsx>{`
-        * {
-          user-select: none;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-        }
-        
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes slideUp {
-          from { 
-            opacity: 0;
-            transform: translateY(20px); 
-          }
-          to { 
-            opacity: 1;
-            transform: translateY(0); 
-          }
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(-45deg); }
-          50% { transform: translateY(-10px) rotate(-45deg); }
-        }
-        
+      <style>{`
         @keyframes shake {
           0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-8px); }
-          75% { transform: translateX(8px); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+          20%, 40%, 60%, 80% { transform: translateX(4px); }
         }
-        
         @keyframes heartbeat {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.1); }
         }
-        
         @keyframes twinkle {
-          0%, 100% { opacity: 0.3; }
+          0%, 100% { opacity: 0.4; }
           50% { opacity: 1; }
         }
-        
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+        .animate-shake {
+          animation: shake 0.2s ease-in-out;
         }
-        
-        .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
-        .animate-slideUp { animation: slideUp 0.4s ease-out; }
-        .animate-float { animation: float 2s ease-in-out infinite; }
-        .animate-shake { animation: shake 0.2s ease-in-out; }
-        .animate-heartbeat { animation: heartbeat 1s ease-in-out infinite; }
-        .animate-twinkle { animation: twinkle 2s ease-in-out infinite; }
-        .animate-spin-slow { animation: spin-slow 3s linear infinite; }
-        .animate-fadeOut { animation: fadeIn 0.6s ease-out reverse; }
+        .animate-heartbeat {
+          animation: heartbeat 1s ease-in-out infinite;
+        }
+        .animate-twinkle {
+          animation: twinkle 2s ease-in-out infinite;
+        }
       `}</style>
     </div>
   );
