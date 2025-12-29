@@ -31,19 +31,18 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
   const keys = useRef<Set<string>>(new Set());
   const [, setTick] = useState(0);
 
-  // --- Core Logic ---
-  const spawn = (type: 'stars' | 'hazards' | 'gems', count = 1) => {
+ const spawn = (type: 'stars' | 'hazards' | 'gems', count = 1) => {
     for(let i=0; i<count; i++) {
       entities.current[type].push({
         id: Math.random(),
         x: Math.random() * 100,
         y: -10,
-        speed: type === 'hazards' ? 0.8 + Math.random() : 0.5 + Math.random() * 2,
+        speed: type === 'hazards' ? 0.3 + Math.random() * 0.3 : 0.2 + Math.random() * 0.5,
         size: type === 'hazards' ? 25 : 15
       });
     }
   };
-
+  
   const createFX = (x: number, y: number, color: string, n = 8) => {
     for (let i = 0; i < n; i++) {
       entities.current.particles.push({
@@ -60,7 +59,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
     entities.current.lastTime = time;
 
     // Smooth Input Interpolation
-    const speed = 0.2;
+    const speed = 0.02;
     if (keys.current.has("arrowleft") || keys.current.has("a")) player.current.targetX -= speed * dt;
     if (keys.current.has("arrowright") || keys.current.has("d")) player.current.targetX += speed * dt;
     if (keys.current.has("arrowup") || keys.current.has("w")) player.current.targetY -= speed * dt;
