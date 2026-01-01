@@ -64,10 +64,6 @@ export default function About() {
                 <div className="text-sm text-gray-300">Location</div>
                 <div className="text-lg font-semibold">Memphis, TN</div>
               </div>
-              <div>
-                <div className="text-sm text-gray-300">EIN</div>
-                <div className="text-lg font-semibold">99-1301788</div>
-              </div>
             </div>
           </div>
         </div>
