@@ -7,12 +7,12 @@ type GameItem = { id: number; x: number; y: number; speed: number; size: number;
 type Bullet = { id: number; x: number; y: number; };
 type Particle = { id: number; x: number; y: number; vx: number; vy: number; life: number; color: string; size: number; };
 
-export default function SpaceAdventureGame({ handleClose }: { handleClose?: () => void }) {
+export default function SpaceAdventureGame({ handleClose, rocketPosition }: { handleClose?: () => void; rocketPosition?: { x: number; y: number } }) {
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [lives, setLives] = useState(3);
-  const [shake, setShake] = useState(false);  
+  const [shake, setShake] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isOpening, setIsOpening] = useState(true);
 
@@ -113,7 +113,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
 
   useEffect(() => {
     if (gameStarted && !gameOver && !isOpening) {
-        requestRef.current = requestAnimationFrame(update);
+      requestRef.current = requestAnimationFrame(update);
     }
     return () => cancelAnimationFrame(requestRef.current!);
   }, [gameStarted, gameOver, isOpening, update]);
@@ -133,12 +133,12 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden perspective-[1200px]">
-      <div 
+      <div
         className={`absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-700 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
         onClick={handleCloseClick}
       />
 
-      <div 
+      <div
         ref={gameArea}
         onMouseMove={(e) => {
           const rect = gameArea.current?.getBoundingClientRect();
@@ -187,7 +187,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
 
         {/* Player Vessel */}
         {gameStarted && !gameOver && (
-          <div 
+          <div
             className="absolute transition-transform duration-75 pointer-events-none"
             style={{ left: `${player.current.x}%`, top: `${player.current.y}%`, transform: `translate(-50%, -50%) rotate(${player.current.rot}deg)` }}
           >
@@ -200,11 +200,11 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
         {(!gameStarted || gameOver) && (
           <div className="absolute inset-0 flex flex-col items-center justify-center z-[60] bg-black/40 backdrop-blur-xl">
             <h1 className="text-6xl font-black text-white italic tracking-tighter mb-8">{gameOver ? "Vessel Lost" : "Void Runner"}</h1>
-            <button 
-                onClick={() => { setScore(0); setLives(3); setGameOver(false); setGameStarted(true); }}
-                className="px-14 py-5 bg-white text-black font-black rounded-full hover:scale-105 transition-transform shadow-2xl"
+            <button
+              onClick={() => { setScore(0); setLives(3); setGameOver(false); setGameStarted(true); }}
+              className="px-14 py-5 bg-white text-black font-black rounded-full hover:scale-105 transition-transform shadow-2xl"
             >
-                {gameOver ? "REBOOT" : "LAUNCH"}
+              {gameOver ? "REBOOT" : "LAUNCH"}
             </button>
           </div>
         )}
