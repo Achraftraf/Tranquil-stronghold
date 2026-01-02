@@ -192,7 +192,14 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
             style={{ left: `${player.current.x}%`, top: `${player.current.y}%`, transform: `translate(-50%, -50%) rotate(${player.current.rot}deg)` }}
           >
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3 h-12 bg-blue-500/40 blur-lg animate-pulse" />
-            <Rocket size={40} className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+            {/* <Rocket size={40} className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" /> */}
+             <svg width="23" height="40" viewBox="0 0 40 60">
+              <path d="M20 0C10 15 5 35 5 50H35C35 35 30 15 20 0Z" fill="#fff" />
+              <path d="M20 5C14 20 10 35 10 45H30C30 35 26 20 20 5Z" fill="#e2e8f0" />
+              <circle cx="20" cy="25" r="4" fill="#38bdf8" />
+              <path d="M5 35L0 55L5 50Z" fill="#ef4444" />
+              <path d="M35 35L40 55L35 50Z" fill="#ef4444" />
+            </svg>
           </div>
         )}
 
