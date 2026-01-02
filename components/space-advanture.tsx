@@ -134,7 +134,7 @@ export default function SpaceAdventureGame({ handleClose, rocketPosition }: { ha
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden perspective-[1200px]">
       <div
-        className={`absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-700 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
+        className={`absolute inset-0 bg-gradient-to-br from-blue-50/95 via-cyan-50/95 to-sky-100/95 backdrop-blur-xl transition-opacity duration-700 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
         onClick={handleCloseClick}
       />
 
@@ -150,39 +150,39 @@ export default function SpaceAdventureGame({ handleClose, rocketPosition }: { ha
         onClick={() => gameStarted && !gameOver && entities.current.bullets.push({ id: Math.random(), x: player.current.x, y: player.current.y - 5 })}
         className={`
           relative w-full max-w-2xl h-[80vh] max-h-[700px]
-          bg-[#05070a] rounded-[3.5rem] border border-white/10 overflow-hidden
-          shadow-[0_50px_100px_rgba(0,0,0,0.8)]
+          bg-gradient-to-b from-sky-100 via-blue-50 to-cyan-100 rounded-[3.5rem] border-2 border-blue-200/50 overflow-hidden
+          shadow-[0_20px_60px_rgba(59,130,246,0.3)]
           ${shake ? 'animate-shake' : ''}
           ${isClosing ? 'animate-genie-close' : isOpening ? 'animate-genie-open' : ''}
         `}
       >
-        {/* Parallax Starfield */}
+        {/* Parallax Starfield - Light Theme */}
         {entities.current.stars.map(s => (
-          <div key={s.id} className="absolute bg-white rounded-full" style={{ left: `${s.x}%`, top: `${s.y}%`, width: `${s.size}px`, height: `${s.size}px`, opacity: s.speed / 2.5 }} />
+          <div key={s.id} className="absolute bg-blue-300 rounded-full" style={{ left: `${s.x}%`, top: `${s.y}%`, width: `${s.size}px`, height: `${s.size}px`, opacity: s.speed / 4 }} />
         ))}
 
-        {/* HUD */}
+        {/* HUD - Enhanced Light Theme */}
         <div className="absolute top-10 inset-x-10 flex justify-between items-center z-50 pointer-events-none">
-          <div className="px-6 py-2 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10">
-            <span className="text-[10px] text-blue-400 font-black uppercase tracking-widest block">Telemetry</span>
-            <span className="text-2xl font-black text-white italic">{score.toLocaleString()}</span>
+          <div className="px-6 py-3 bg-white/80 backdrop-blur-xl rounded-2xl border-2 border-blue-200 shadow-lg">
+            <span className="text-[10px] text-blue-600 font-black uppercase tracking-widest block">Score</span>
+            <span className="text-2xl font-black bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent italic">{score.toLocaleString()}</span>
           </div>
           <div className="flex gap-3">
             {[...Array(3)].map((_, i) => (
-              <Heart key={i} size={22} className={`${i < lives ? 'text-red-500 fill-red-500' : 'text-white/10'} transition-all duration-500`} />
+              <Heart key={i} size={22} className={`${i < lives ? 'text-rose-500 fill-rose-500 drop-shadow-lg' : 'text-gray-300'} transition-all duration-500`} />
             ))}
           </div>
         </div>
 
-        {/* Particles & Hazards */}
+        {/* Particles & Hazards - Enhanced */}
         {entities.current.particles.map(p => (
-          <div key={p.id} className="absolute rounded-full" style={{ left: `${p.x}%`, top: `${p.y}%`, width: `${p.size}px`, height: `${p.size}px`, backgroundColor: p.color, opacity: p.life }} />
+          <div key={p.id} className="absolute rounded-full shadow-lg" style={{ left: `${p.x}%`, top: `${p.y}%`, width: `${p.size}px`, height: `${p.size}px`, backgroundColor: p.color, opacity: p.life, filter: 'blur(0.5px)' }} />
         ))}
         {entities.current.hazards.map(h => (
-          <Flame key={h.id} size={h.size} className="absolute text-orange-500 animate-pulse" style={{ left: `${h.x}%`, top: `${h.y}%`, transform: 'translate(-50%,-50%)' }} />
+          <Flame key={h.id} size={h.size} className="absolute text-orange-400 animate-pulse drop-shadow-[0_0_8px_rgba(251,146,60,0.6)]" style={{ left: `${h.x}%`, top: `${h.y}%`, transform: 'translate(-50%,-50%)' }} />
         ))}
         {entities.current.bullets.map(b => (
-          <div key={b.id} className="absolute bg-cyan-400 w-1 h-6 rounded-full shadow-[0_0_12px_#22d3ee]" style={{ left: `${b.x}%`, top: `${b.y}%`, transform: 'translateX(-50%)' }} />
+          <div key={b.id} className="absolute bg-gradient-to-t from-blue-500 to-cyan-400 w-1.5 h-7 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.8)]" style={{ left: `${b.x}%`, top: `${b.y}%`, transform: 'translateX(-50%)' }} />
         ))}
 
         {/* Player Vessel */}
@@ -191,20 +191,29 @@ export default function SpaceAdventureGame({ handleClose, rocketPosition }: { ha
             className="absolute transition-transform duration-75 pointer-events-none"
             style={{ left: `${player.current.x}%`, top: `${player.current.y}%`, transform: `translate(-50%, -50%) rotate(${player.current.rot}deg)` }}
           >
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3 h-12 bg-blue-500/40 blur-lg animate-pulse" />
-            <Rocket size={40} className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]" />
+            {/* Engine FX */}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-4 h-12 bg-gradient-to-b from-blue-400 via-cyan-300 to-transparent blur-sm animate-engine" />
+
+            <svg width="28" height="48" viewBox="0 0 40 60" className="drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+              <path d="M20 0C10 15 5 35 5 50H35C35 35 30 15 20 0Z" fill="#3b82f6" />
+              <path d="M20 5C14 20 10 35 10 45H30C30 35 26 20 20 5Z" fill="#60a5fa" />
+              <circle cx="20" cy="25" r="4" fill="#22d3ee" />
+              <path d="M5 35L0 55L5 50Z" fill="#06b6d4" />
+              <path d="M35 35L40 55L35 50Z" fill="#06b6d4" />
+            </svg>
           </div>
         )}
 
-        {/* Menus */}
+        {/* Menus - Light Theme */}
         {(!gameStarted || gameOver) && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center z-[60] bg-black/40 backdrop-blur-xl">
-            <h1 className="text-6xl font-black text-white italic tracking-tighter mb-8">{gameOver ? "Vessel Lost" : "Void Runner"}</h1>
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-[60] bg-white/90 backdrop-blur-2xl">
+            <h1 className="text-6xl font-black bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-600 bg-clip-text text-transparent italic tracking-tighter mb-4">{gameOver ? "Mission Complete" : "Space Adventure"}</h1>
+            <p className="text-blue-400 text-sm mb-8 tracking-widest uppercase">{gameOver ? `Final Score: ${score.toLocaleString()}` : "Ready for Launch"}</p>
             <button
               onClick={() => { setScore(0); setLives(3); setGameOver(false); setGameStarted(true); }}
-              className="px-14 py-5 bg-white text-black font-black rounded-full hover:scale-105 transition-transform shadow-2xl"
+              className="px-14 py-5 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-black rounded-full hover:scale-105 hover:shadow-2xl transition-all shadow-lg"
             >
-              {gameOver ? "REBOOT" : "LAUNCH"}
+              {gameOver ? "PLAY AGAIN" : "START GAME"}
             </button>
           </div>
         )}
@@ -266,6 +275,10 @@ export default function SpaceAdventureGame({ handleClose, rocketPosition }: { ha
           0%, 100% { transform: translate(0,0); }
           25% { transform: translate(-5px, 3px); }
           75% { transform: translate(5px, -3px); }
+        }
+        @keyframes engine {
+          0%, 100% { height: 10px; opacity: 0.6; }
+          50% { height: 16px; opacity: 1; }
         }
       `}</style>
     </div>
