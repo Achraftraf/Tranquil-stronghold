@@ -4,16 +4,33 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Star, Heart, Zap, Shield, Target, Flame, Sparkles } from 'lucide-react';
 
 type GameItem = { id: number; x: number; y: number; speed: number; size: number; };
-type Enemy = { id: number; x: number; y: number; speed: number; size: number; type: 'basic' | 'fast' | 'tank' | 'boss'; hp: number; maxHp: number; };
+type Enemy = {
+  id: number; x: number; y: number; speed: number; size: number;
+  type: 'basic' | 'fast' | 'tank' | 'boss'; hp: number; maxHp: number;
+  rot: number; rotSpeed: number;
+};
 type Bullet = { id: number; x: number; y: number; damage: number; };
 type PowerUp = { id: number; x: number; y: number; type: 'shield' | 'rapidfire' | 'multishot' | 'score2x'; speed: number; };
 type Particle = { id: number; x: number; y: number; vx: number; vy: number; life: number; color: string; size: number; };
+type FloatingText = { id: number; x: number; y: number; text: string; life: number; color: string; };
+
+const funnyMessages = [
+  "Ouch!", "My bad!", "Lag!", "Why me?", "Clean up!",
+  "Nooo!", "Cheater!", "Rude!", "404 Error", "Ctrl+Z!",
+  "I'll be back!", "System Failure", "Glitch!", "Bruh.", "Seriously?",
+  "Oof", "Skill issue", "Delete system32", "Alt+F4?", "Mom!",
+  "Tis but a scratch", "Have you tried turning it off and on?", "I was promised cake",
+  "Help! I'm being repressed!", "It's a trap!", "Hello there!", "General Kenobi!",
+  "I have the high ground", "Unlimited Power!", "So uncivilized", "I am the Senate",
+  "Pew Pew!", "Aimbot detected", "Reporting you", "My dad owns Microsoft",
+  "Lag switching!", "Nice wallhacks", "Get gud", "Ez", "L + Ratio"
+];
 
 export default function SpaceAdventureGame({ handleClose }: { handleClose?: () => void }) {
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [lives, setLives] = useState(3);
+  const [lives, setLives] = useState(10);
   const [shake, setShake] = useState(0);
   const [isClosing, setIsClosing] = useState(false);
   const [isOpening, setIsOpening] = useState(true);
@@ -32,6 +49,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
     bullets: [] as Bullet[],
     powerUps: [] as PowerUp[],
     particles: [] as Particle[],
+    floatingTexts: [] as FloatingText[],
     nebula: [] as GameItem[],
     lastTime: 0,
     lastShot: 0,
@@ -90,24 +108,24 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
     let type: Enemy['type'] = 'basic';
     let hp = 1;
     let size = 28;
-    let speed = 0.9 + Math.random() * 0.6;
+    let speed = 0.5 + Math.random() * 0.4;
 
     // Boss every 2000 points
     if (score > 0 && score % 2000 === 0 && entities.current.enemies.filter(e => e.type === 'boss').length === 0) {
       type = 'boss';
       hp = 15 + wave * 5;
       size = 70;
-      speed = 0.5;
+      speed = 0.3;
     } else if (rand < 0.12 * diff) {
       type = 'tank';
-      hp = 3;
+      hp = 2; // Nerfed tank hp
       size = 38;
-      speed = 0.6;
+      speed = 0.4;
     } else if (rand < 0.3 * diff) {
       type = 'fast';
       hp = 1;
       size = 22;
-      speed = 1.6 + Math.random();
+      speed = 1.0 + Math.random() * 0.5;
     }
 
     entities.current.enemies.push({
@@ -118,7 +136,9 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
       size,
       type,
       hp,
-      maxHp: hp
+      maxHp: hp,
+      rot: 0,
+      rotSpeed: (Math.random() - 0.5) * 10
     });
   };
 
@@ -197,8 +217,8 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
     player.current.targetY = Math.max(12, Math.min(88, player.current.targetY));
 
     const prevX = player.current.x;
-    player.current.x += (player.current.targetX - player.current.x) * 0.2 * dt;
-    player.current.y += (player.current.targetY - player.current.y) * 0.2 * dt;
+    player.current.x += (player.current.targetX - player.current.x) * 0.12 * dt;
+    player.current.y += (player.current.targetY - player.current.y) * 0.12 * dt;
     player.current.rot = (player.current.x - prevX) * 12;
 
     const state = entities.current;
@@ -208,6 +228,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
     state.stars.forEach(s => s.y += s.speed * dt);
     state.enemies.forEach(e => {
       e.y += e.speed * dt;
+      e.rot += e.rotSpeed * dt;
       if (e.type === 'boss') {
         e.x += Math.sin(e.y * 0.04) * 0.4 * dt;
       } else if (e.type === 'fast') {
@@ -279,9 +300,24 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
             } else if (Math.random() < 0.18) {
               spawnPowerUp(e.x, e.y);
             }
+
+            // Funny text spawn
+            const msg = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+            entities.current.floatingTexts.push({
+              id: Math.random(),
+              x: e.x,
+              y: e.y,
+              text: msg,
+              life: 1.0,
+              color: e.type === 'boss' ? '#fbbf24' : '#fff'
+            });
+
+            return false;
             return false;
           } else {
             createFX(e.x, e.y, '#fb923c', 10, 3);
+            e.rotSpeed += (Math.random() - 0.5) * 50; // Spin on hit
+            e.y -= 1; // Knockback
           }
         }
         return true;
@@ -299,7 +335,13 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
     });
 
     state.stars = state.stars.filter(s => s.y < 110);
+    state.stars = state.stars.filter(s => s.y < 110);
     state.particles = state.particles.filter(p => p.life > 0);
+    state.floatingTexts = state.floatingTexts.filter(t => t.life > 0);
+    state.floatingTexts.forEach(t => {
+      t.y -= 0.5 * dt;
+      t.life -= 0.015 * dt;
+    });
 
     setTick(t => t + 1);
     requestRef.current = requestAnimationFrame(update);
@@ -330,7 +372,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
 
   const resetGame = () => {
     setScore(0);
-    setLives(3);
+    setLives(10);
     setGameOver(false);
     setGameStarted(true);
     setCombo(0);
@@ -343,7 +385,9 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
     entities.current.enemies = [];
     entities.current.bullets = [];
     entities.current.powerUps = [];
+    entities.current.powerUps = [];
     entities.current.particles = [];
+    entities.current.floatingTexts = [];
     entities.current.difficulty = 1;
   };
 
@@ -484,7 +528,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
             style={{
               left: `${e.x}%`,
               top: `${e.y}%`,
-              transform: 'translate(-50%, -50%)'
+              transform: `translate(-50%, -50%) rotate(${e.rot}deg)`
             }}
           >
             {e.type === 'boss' ? (
@@ -574,6 +618,24 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
             }}
           >
             <div className="w-1.5 h-8 bg-gradient-to-t from-cyan-400 to-blue-300 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.9)]" />
+          </div>
+        ))}
+
+        {/* Floating Text */}
+        {entities.current.floatingTexts.map(t => (
+          <div
+            key={t.id}
+            className="absolute text-sm font-black pointer-events-none whitespace-nowrap"
+            style={{
+              left: `${t.x}%`,
+              top: `${t.y}%`,
+              color: t.color,
+              opacity: t.life,
+              transform: `translate(-50%, -50%) translateY(-${(1 - t.life) * 40}px) scale(${0.5 + t.life * 0.5}) rotate(${Math.sin(t.id * 10) * 15}deg)`,
+              textShadow: '0 2px 8px rgba(0,0,0,0.8)'
+            }}
+          >
+            {t.text}
           </div>
         ))}
 
