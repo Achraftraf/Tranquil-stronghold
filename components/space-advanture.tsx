@@ -196,7 +196,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
       entities.current.bullets.push({ id: Math.random(), x: player.current.x, y: player.current.y - 5, damage });
     }
 
-    createFX(player.current.x, player.current.y - 5, '#22d3ee', 6, 2);
+    createFX(player.current.x, player.current.y - 5, '#2dd4bf', 6, 2);
   };
 
   const update = useCallback((time: number) => {
@@ -263,7 +263,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
       if (Math.hypot(player.current.x - e.x, player.current.y - e.y) < (e.size + 24) / 3.5) {
         if (hasShield) {
           setHasShield(false);
-          createFX(e.x, e.y, '#3b82f6', 30, 5);
+          createFX(e.x, e.y, '#06b6d4', 30, 5);
           setScore(s => s + 15 * scoreMultiplier);
           return false;
         } else {
@@ -427,7 +427,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
               top: `${n.y}%`,
               width: `${n.size}px`,
               height: `${n.size}px`,
-              background: `radial-gradient(circle, ${['#6366f1', '#8b5cf6', '#3b82f6'][Math.floor(n.id * 3) % 3]} 0%, transparent 70%)`
+              background: `radial-gradient(circle, ${['#3b82f6', '#06b6d4', '#14b8a6'][Math.floor(n.id * 3) % 3]} 0%, transparent 70%)`
             }}
           />
         ))}
@@ -482,9 +482,9 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
 
             <div className="flex flex-col gap-1.5">
               {hasShield && (
-                <div className="px-3 py-1 bg-blue-500/25 backdrop-blur-xl rounded-lg border border-blue-400/40 flex items-center gap-2">
-                  <Shield size={14} className="text-blue-300" />
-                  <span className="text-xs font-bold text-blue-200">SHIELD</span>
+                <div className="px-3 py-1 bg-cyan-500/25 backdrop-blur-xl rounded-lg border border-cyan-400/40 flex items-center gap-2">
+                  <Shield size={14} className="text-cyan-300" />
+                  <span className="text-xs font-bold text-cyan-200">SHIELD</span>
                 </div>
               )}
               {rapidFire && (
@@ -593,7 +593,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
               animation: 'float 2s ease-in-out infinite'
             }}
           >
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-sm border-2 shadow-lg ${p.type === 'shield' ? 'bg-blue-500/30 border-blue-300 shadow-blue-500/50' :
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-sm border-2 shadow-lg ${p.type === 'shield' ? 'bg-cyan-500/30 border-cyan-300 shadow-cyan-500/50' :
               p.type === 'rapidfire' ? 'bg-red-500/30 border-red-300 shadow-red-500/50' :
                 p.type === 'multishot' ? 'bg-purple-500/30 border-purple-300 shadow-purple-500/50' :
                   'bg-yellow-500/30 border-yellow-300 shadow-yellow-500/50'

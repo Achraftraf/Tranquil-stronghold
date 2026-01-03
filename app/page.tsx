@@ -92,13 +92,13 @@ export default function Home() {
             <div className="flex items-center gap-4 mt-4">
               <Link
                 href="/team"
-                className="text-xl px-6 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition border-2 border-blue-500"
+                className="text-xl px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-teal-500/30 transition border-none"
               >
                 Join Us
               </Link>
               <Link
                 href="/about"
-                className="group relative text-xl px-6 py-2 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition"
+                className="group relative text-xl px-6 py-2 rounded-full border-2 border-teal-500 text-teal-600 hover:bg-teal-50 transition"
               >
                 Learn More
                 <IoChevronForward
@@ -126,9 +126,9 @@ export default function Home() {
             <a
               target="_blank"
               href={"https://givebutter.com/auElnc"}
-              className="inline-flex border border-neutral-300 items-center gap-2 bg-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-600 mb-6 hover:underline hover:underline-blue-500"
+              className="inline-flex border border-teal-100 items-center gap-2 bg-teal-50/50 px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-teal-700 mb-6 hover:bg-teal-100 transition-colors"
             >
-              <FaDonate className="w-4 h-4" />
+              <FaDonate className="w-4 h-4 text-teal-600" />
               Donate
             </a>
             <div className="max-w-3xl mx-auto text-center">
@@ -203,9 +203,9 @@ export default function Home() {
             target="_blank"
             href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
             rel="noopener noreferrer"
-            className="inline-flex border border-neutral-300 items-center gap-2 bg-white px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-blue-600 mb-6 hover:underline hover:underline-blue-500"
+            className="inline-flex border border-teal-100 items-center gap-2 bg-teal-50/50 px-4 py-1 rounded-full text-xs sm:text-sm font-medium text-teal-700 mb-6 hover:bg-teal-100 transition-colors"
           >
-            <RiTeamLine className="w-4 h-4" />
+            <RiTeamLine className="w-4 h-4 text-teal-600" />
             Join our Team
           </a>
         </AnimatedSectionH>
@@ -215,25 +215,25 @@ export default function Home() {
           classNames="max-w-5xl mx-auto w-full px-6 bg-white"
         >
           <div className="max-w-7xl mx-auto px-6 py-24">
-            <div className="relative overflow-hidden rounded-[3rem] bg-white p-8 shadow-[0_30px_100px_-20px_rgba(33,212,191,0.15),0_10px_40px_-10px_rgba(0,0,0,0.05)] ring-1 ring-teal-900/5 sm:p-20 md:p-24 isolation-auto">
+            <div className="relative overflow-hidden rounded-[3rem] bg-white p-8 shadow-[0_30px_100px_-20px_rgba(59,130,246,0.15),0_10px_40px_-10px_rgba(0,0,0,0.05)] ring-1 ring-blue-900/5 sm:p-20 md:p-24 isolation-auto">
 
               {/* Dynamic brand background effects */}
-              <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[50rem] h-[50rem] bg-gradient-to-br from-teal-100/50 via-cyan-100/40 to-emerald-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow mix-blend-multiply"></div>
-              <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[45rem] h-[45rem] bg-gradient-to-tr from-sky-100/50 via-teal-100/40 to-cyan-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow [animation-delay:2s] mix-blend-multiply"></div>
+              <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[50rem] h-[50rem] bg-gradient-to-br from-blue-100/50 via-teal-100/40 to-cyan-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow mix-blend-multiply"></div>
+              <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[45rem] h-[45rem] bg-gradient-to-tr from-cyan-100/50 via-blue-100/40 to-teal-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow [animation-delay:2s] mix-blend-multiply"></div>
 
               <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-multiply pointer-events-none"></div>
 
               <div className="relative z-10 flex flex-col items-center text-center">
-                <span className="mb-8 inline-flex items-center justify-center gap-2 rounded-full bg-teal-50 px-4 py-1.5 text-sm font-bold tracking-wide text-teal-600 ring-1 ring-inset ring-teal-600/20 transition-all hover:bg-teal-100 hover:scale-105 cursor-default shadow-sm">
+                <span className="mb-8 inline-flex items-center justify-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-bold tracking-wide text-blue-600 ring-1 ring-inset ring-blue-600/20 transition-all hover:bg-blue-100 hover:scale-105 cursor-default shadow-sm">
                   <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
                   </span>
                   Partner With Us
                 </span>
 
                 <h2 className="mb-8 max-w-4xl text-5xl font-black tracking-tighter text-gray-900 sm:text-6xl md:text-7xl">
-                  Ready to <span className="bg-gradient-to-r from-teal-500 via-cyan-500 to-sky-500 bg-clip-text text-transparent drop-shadow-sm">Make an Impact?</span>
+                  Ready to <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 bg-clip-text text-transparent drop-shadow-sm">Make an Impact?</span>
                 </h2>
 
                 <p className="mb-12 max-w-2xl text-lg font-medium leading-relaxed text-gray-600 sm:text-xl">
@@ -245,17 +245,15 @@ export default function Home() {
                     href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-full bg-blue-600 px-8 text-base font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:bg-blue-700 hover:scale-105 hover:shadow-blue-500/50"
+                    className="text-xl px-10 py-3.5 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-teal-500/30 transition border-none flex items-center gap-2"
                   >
-                    <span className="relative z-10 flex items-center gap-2">
-                      Get Involved
-                      <GoArrowRight className="transition-transform group-hover:translate-x-1" />
-                    </span>
+                    <span>Get Involved</span>
+                    <GoArrowRight />
                   </a>
 
                   <a
                     href="mailto:admin@steadfasthaven.org"
-                    className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border-2 border-gray-200 bg-white px-8 text-base font-bold text-gray-900 transition-all hover:border-gray-300 hover:bg-gray-50 hover:scale-105"
+                    className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-10 text-base font-bold text-gray-700 shadow-sm transition-all hover:border-blue-200 hover:bg-blue-50/50 hover:text-blue-700 hover:scale-[1.02]"
                   >
                     Contact Team
                   </a>
@@ -264,7 +262,7 @@ export default function Home() {
             </div>
           </div>
         </AnimatedSectionH>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 }

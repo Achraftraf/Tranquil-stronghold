@@ -126,7 +126,7 @@ export const ProjectCard: React.FC<Props> = ({ project, index, onClick }) => {
           </div>
 
           {project.featured && (
-            <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+            <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
               Featured
             </div>
           )}
