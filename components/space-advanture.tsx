@@ -42,7 +42,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
   const gameArea = useRef<HTMLDivElement>(null);
   const keys = useRef<Set<string>>(new Set());
   const [, setTick] = useState(0);
-  const comboTimeout = useRef<NodeJS.Timeout>();
+  const comboTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsOpening(false), 800);
@@ -348,7 +348,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden perspective-[1200px]">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden perspective-[1200px]" >
       <div
         className={`absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-700 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
         onClick={handleCloseClick}
@@ -367,6 +367,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
         className={`
           relative w-full max-w-3xl h-[85vh] max-h-[750px]
           bg-[#05070a] rounded-[3rem] border border-white/10 overflow-hidden
+           translate-y-8
           shadow-[0_50px_100px_rgba(0,0,0,0.8)]
           ${shake > 0 ? 'animate-shake' : ''}
           ${isClosing ? 'animate-genie-close' : isOpening ? 'animate-genie-open' : ''}
@@ -549,9 +550,9 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
             }}
           >
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-sm border-2 shadow-lg ${p.type === 'shield' ? 'bg-blue-500/30 border-blue-300 shadow-blue-500/50' :
-                p.type === 'rapidfire' ? 'bg-red-500/30 border-red-300 shadow-red-500/50' :
-                  p.type === 'multishot' ? 'bg-purple-500/30 border-purple-300 shadow-purple-500/50' :
-                    'bg-yellow-500/30 border-yellow-300 shadow-yellow-500/50'
+              p.type === 'rapidfire' ? 'bg-red-500/30 border-red-300 shadow-red-500/50' :
+                p.type === 'multishot' ? 'bg-purple-500/30 border-purple-300 shadow-purple-500/50' :
+                  'bg-yellow-500/30 border-yellow-300 shadow-yellow-500/50'
               }`}>
               {p.type === 'shield' && <Shield size={20} className="text-blue-200" />}
               {p.type === 'rapidfire' && <Zap size={20} className="text-red-200" />}
@@ -633,7 +634,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
 
         {/* Menus */}
         {(!gameStarted || gameOver) && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center z-[60] bg-black/50 backdrop-blur-xl">
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-[60] bg-black/50 backdrop-blur-xl mt-24">
             <div className="text-center space-y-6 px-8">
               <h1 className="text-7xl font-black text-white italic tracking-tight drop-shadow-2xl">
                 {gameOver ? "Mission Complete" : "Void Runner"}
