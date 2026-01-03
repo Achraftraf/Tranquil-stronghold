@@ -87,21 +87,21 @@ export default function About() {
       >
         {loading
           ? // Show skeletons while loading
-            Array.from({ length: 6 }).map((_, index) => (
-              <MemberSkeleton key={`skeleton-member-${index}`} />
-            ))
+          Array.from({ length: 6 }).map((_, index) => (
+            <MemberSkeleton key={`skeleton-member-${index}`} />
+          ))
           : // Show actual team members when loaded
-            team.map((member: TeamMember, index: number) => (
-              <Member
-                key={index}
-                id={index}
-                name={member.name}
-                instagram={member.instagram}
-                role={member.role}
-                description={member.description}
-                image={member.image}
-              />
-            ))}
+          team.map((member: TeamMember, index: number) => (
+            <Member
+              key={index}
+              id={index}
+              name={member.name}
+              instagram={member.instagram}
+              role={member.role}
+              description={member.description}
+              image={member.image}
+            />
+          ))}
       </AnimatedSection>
 
       <AnimatedSection delay={0.8} classNames="">
@@ -140,30 +140,40 @@ export default function About() {
         classNames="max-w-5xl mx-auto w-full bg-white"
       >
         <div className="max-w-7xl mx-auto pb-12">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-3xl p-12 text-center text-white">
-            <h2 className="text-4xl font-bold mb-4">Want to get Involved?</h2>
-            <p className="text-xl mb-8 text-blue-50 max-w-2xl mx-auto">
-              Your support helps us empower Memphis youth to create, grow, and
-              thrive through art, film, and music.
-            </p>
+          <div className="relative overflow-hidden rounded-[3rem] bg-white p-8 md:p-16 text-center shadow-[0_40px_100px_-20px_rgba(0,0,0,0.08)] ring-1 ring-gray-200/50 isolation-auto">
 
-            <div className="flex flex-wrap gap-4 justify-center">
-              <a
-                href="mailto:admin@steadfasthaven.org"
-                className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-all shadow-lg inline-flex items-center gap-2"
-              >
-                <Mail className="w-5 h-5" />
-                Contact Us
-              </a>
-              <a
-                href="https://givebutter.com/auElnc"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-all inline-flex items-center gap-2"
-              >
-                <Heart className="w-5 h-5" />
-                Donate Now
-              </a>
+            {/* Dynamic brand background effects */}
+            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[30rem] h-[30rem] bg-blue-50/50 rounded-full blur-3xl pointer-events-none animate-pulse-slow"></div>
+            <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[25rem] h-[25rem] bg-teal-50/50 rounded-full blur-3xl pointer-events-none animate-pulse-slow [animation-delay:2s]"></div>
+
+            <div className="relative z-10">
+              <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-gray-900">
+                Want to <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent pr-1">get Involved?</span>
+              </h2>
+
+              <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-10">
+                Your support helps us empower Memphis youth to create, grow, and thrive through art, film, and music.
+              </p>
+
+              <div className="flex flex-wrap gap-5 justify-center">
+                <a
+                  href="mailto:admin@steadfasthaven.org"
+                  className="group relative inline-flex h-14 items-center justify-center gap-3 bg-gray-900 text-white px-10 rounded-full font-bold text-lg hover:bg-black hover:shadow-xl hover:shadow-gray-200 hover:-translate-y-0.5 active:scale-[0.98] transition-all"
+                >
+                  <Mail className="w-5 h-5" />
+                  Contact Us
+                </a>
+
+                <a
+                  href="https://givebutter.com/auElnc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative inline-flex h-14 items-center justify-center gap-3 border border-gray-200 bg-white text-gray-700 px-10 rounded-full font-bold text-lg hover:border-blue-200 hover:bg-blue-50/50 hover:text-blue-700 hover:scale-[1.02] transition-all"
+                >
+                  <Heart className="w-5 h-5 text-red-500" />
+                  Donate Now
+                </a>
+              </div>
             </div>
           </div>
         </div>

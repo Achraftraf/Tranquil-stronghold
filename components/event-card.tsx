@@ -96,7 +96,7 @@ export const EventCard = ({ event, index, loading = false }: Props) => {
           </div>
 
           {(loading || event?.featured) && (
-            <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+            <div className="absolute top-4 left-4 bg-gradient-to-r from-blue-600 to-teal-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
               {loading ? (
                 <div className="h-4 w-16 bg-blue-400 rounded animate-pulse" />
               ) : (
