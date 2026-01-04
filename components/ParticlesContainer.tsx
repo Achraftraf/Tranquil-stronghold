@@ -128,8 +128,8 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
               color: linkColor,
               distance: 150,
               enable: true,
-              opacity: 0.3,
-              width: 1,
+              opacity: 0.5,
+              width: 1.2,
             },
             move: {
               enable: true,
@@ -150,10 +150,10 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
               },
             },
             opacity: {
-              value: { min: 0.3, max: 0.7 },
+              value: { min: 0.6, max: 0.9 },
               animation: {
                 enable: true,
-                speed: 1,
+                speed: 0.5,
                 sync: false,
                 mode: "auto",
                 startValue: "random",
@@ -164,7 +164,7 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
               type: "circle"
             },
             size: {
-              value: { min: 1, max: 4 },
+              value: { min: 2, max: 6 },
               animation: {
                 enable: true,
                 speed: 2,
