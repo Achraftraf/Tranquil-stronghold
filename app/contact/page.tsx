@@ -33,14 +33,15 @@ const AnimatedSection = ({ children, delay = 0, classNames = "" }: { children: R
 };
 
 const ParticleBackground = () => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-    let animationFrameId;
+    if (!ctx) return;
+    let animationFrameId: number;
     let particles = [];
 
     const resizeCanvas = () => {
@@ -60,12 +61,12 @@ const ParticleBackground = () => {
 
       constructor() {
         this.reset();
-        this.y = Math.random() * canvas.height;
+        this.y = Math.random() * canvas!.height;
         this.opacity = Math.random() * 0.5 + 0.2;
       }
 
       reset() {
-        this.x = Math.random() * canvas.width;
+        this.x = Math.random() * canvas!.width;
         this.y = -10;
         this.speed = Math.random() * 1 + 0.5;
         this.size = Math.random() * 3 + 1;
@@ -74,12 +75,13 @@ const ParticleBackground = () => {
 
       update() {
         this.y += this.speed;
-        if (this.y > canvas.height) {
+        if (this.y > canvas!.height) {
           this.reset();
         }
       }
 
       draw() {
+        if (!ctx) return;
         ctx.fillStyle = `rgba(59, 130, 246, ${this.opacity})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -168,7 +170,10 @@ export default function Contact() {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: 'success' | 'error';
+    message: string;
+  } | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
