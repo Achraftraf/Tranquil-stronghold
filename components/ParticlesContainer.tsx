@@ -19,9 +19,9 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
   style,
   className = "",
   showLoadingIndicator = true,
-  particleColor = "#3b82f6",
-  linkColor = "#60a5fa",
-  particleCount = 80,
+  particleColor = ["#3b82f6", "#14b8a6", "#06b6d4", "#22d3ee"], // Blue-500, Teal-500, Cyan-500, Cyan-400
+  linkColor = "#14b8a6", // Teal-500
+  particleCount = 100,
   interactiveMode = "grab",
 }) => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -57,7 +57,7 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
   // Loading state
   if (!isInitialized) {
     return showLoadingIndicator ? (
-      <div 
+      <div
         className={`fixed inset-0 pointer-events-none ${className}`}
         style={{ ...style, zIndex: style?.zIndex ?? 1 }}
       >
@@ -69,7 +69,7 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
   }
 
   return (
-    <div 
+    <div
       className={`fixed inset-0 pointer-events-none ${className}`}
       style={{ ...style, zIndex: style?.zIndex ?? 1 }}
     >
@@ -78,31 +78,32 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
         particlesLoaded={particlesLoaded}
         className="w-full h-full"
         options={{
-          fullScreen: { 
+          fullScreen: {
             enable: false,
-            zIndex: 0 
+            zIndex: 0
           },
           background: {
             color: { value: "transparent" },
           },
-          fpsLimit: 60,
+          fpsLimit: 120,
           interactivity: {
             events: {
-              onHover: { 
-                enable: true, 
+              onHover: {
+                enable: true,
                 mode: interactiveMode
               },
               onClick: {
-                enable: false,
+                enable: true,
                 mode: "push"
               },
               resize: { enable: true },
             },
             modes: {
               grab: {
-                distance: 140,
+                distance: 180,
                 links: {
                   opacity: 0.8,
+                  color: "#22d3ee" // Cyan link on hover
                 },
               },
               push: {
@@ -120,42 +121,58 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
             },
           },
           particles: {
-            color: { 
-              value: particleColor 
+            color: {
+              value: particleColor
             },
             links: {
               color: linkColor,
               distance: 150,
               enable: true,
-              opacity: 0.4,
-              width: 1,
+              opacity: 0.5,
+              width: 1.2,
             },
             move: {
               enable: true,
-              speed: 1,
+              speed: { min: 0.5, max: 1.5 },
               direction: "none",
-              random: false,
+              random: true,
               straight: false,
-              outModes: { 
-                default: "out" 
+              outModes: {
+                default: "out"
               },
             },
             number: {
               value: particleCount,
-              density: { 
+              density: {
                 enable: true,
                 width: 1920,
                 height: 1080
               },
             },
-            opacity: { 
-              value: 0.5,
+            opacity: {
+              value: { min: 0.6, max: 0.9 },
+              animation: {
+                enable: true,
+                speed: 0.5,
+                sync: false,
+                mode: "auto",
+                startValue: "random",
+                destroy: "none"
+              }
             },
-            shape: { 
-              type: "circle" 
+            shape: {
+              type: "circle"
             },
-            size: { 
-              value: { min: 1, max: 5 }
+            size: {
+              value: { min: 2, max: 6 },
+              animation: {
+                enable: true,
+                speed: 2,
+                sync: false,
+                mode: "auto",
+                startValue: "random",
+                destroy: "none"
+              }
             },
           },
           detectRetina: true,

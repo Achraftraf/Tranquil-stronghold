@@ -19,7 +19,7 @@ export const FeaturedEvent = ({ event }: { event: Event }) => {
         </div>
 
         <div className="relative z-10 p-8 md:p-12 lg:p-16 text-white">
-          <div className="inline-block bg-blue-500 px-4 py-1 rounded-full text-sm font-semibold mb-4">
+          <div className="inline-block bg-gradient-to-r from-teal-500 to-cyan-500 px-4 py-1 rounded-full text-sm font-semibold mb-4 shadow-lg shadow-teal-500/20">
             Next Featured Event
           </div>
 
@@ -46,7 +46,7 @@ export const FeaturedEvent = ({ event }: { event: Event }) => {
             </div>
           </div>
 
-          <button className="bg-white text-gray-900 px-8 py-3 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl">
+          <button className="bg-white text-gray-900 px-8 py-3 rounded-full font-semibold text-lg hover:bg-teal-50 transition-all shadow-lg hover:shadow-xl hover:text-teal-600">
             Register Now
           </button>
         </div>

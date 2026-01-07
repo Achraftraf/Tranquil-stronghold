@@ -30,7 +30,7 @@ const Header = () => {
           <NavItem href="/events" url={pathname} label="Events" />
           <NavItem href="/work" url={pathname} label="Work" />
           <NavItem href="/contact" url={pathname} label="Contact" />
-          <Link target='_blank' href={"https://givebutter.com/auElnc"} className='text-white border border-blue-600 bg-blue-500 my-3 rounded-full px-2 py-1 flex flexrow items-center gap-1 hover:bg-blue-600'>
+          <Link target='_blank' href={"https://givebutter.com/auElnc"} className='text-white bg-gradient-to-r from-teal-500 to-cyan-500 my-3 rounded-full px-4 py-1.5 flex flex-row items-center gap-2 hover:shadow-lg hover:shadow-teal-500/30 transition-all border-none'>
             <FaDonate />
             <span>
               Donate
@@ -51,7 +51,7 @@ const Header = () => {
               <NavItem href="/events" url={pathname} label="Events" />
               <NavItem href="/work" url={pathname} label="Work" />
               <NavItem href="/contact" url={pathname} label="Contact" />
-              <Link target='_blank' href={"https://givebutter.com/auElnc"} className='text-white border border-blue-600 bg-blue-500 my-3 rounded-full px-2 py-1 flex flexrow items-center gap-1 hover:bg-blue-600'>
+              <Link target='_blank' href={"https://givebutter.com/auElnc"} className='text-white bg-gradient-to-r from-teal-500 to-cyan-500 my-3 rounded-full px-4 py-1.5 flex flex-row items-center gap-2 hover:shadow-lg hover:shadow-teal-500/30 transition-all border-none'>
                 <FaDonate />
                 <span>
                   Donate

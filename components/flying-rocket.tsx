@@ -187,7 +187,7 @@ export default function FlyingRocket({ onCatch }: FlyingRocketProps) {
             }}
           >
             <div className="relative">
-              <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 blur-[2px]"></div>
+              <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-br from-blue-400 via-teal-500 to-cyan-500 blur-[2px]"></div>
               <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-white/30 animate-ping" style={{ animationDuration: '1s' }}></div>
             </div>
           </div>
@@ -226,25 +226,25 @@ export default function FlyingRocket({ onCatch }: FlyingRocketProps) {
         >
           <div className="relative">
             {/* Animated rotating glow rings */}
-            <div className="absolute -inset-7 rounded-full bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-xl opacity-60 animate-spin-slow"></div>
-            <div className="absolute -inset-5 rounded-full bg-gradient-to-r from-pink-500/15 via-blue-500/15 to-purple-500/15 blur-lg opacity-50 animate-spin-reverse"></div>
+            <div className="absolute -inset-7 rounded-full bg-gradient-to-r from-blue-500/20 via-teal-500/20 to-cyan-500/20 blur-xl opacity-60 animate-spin-slow"></div>
+            <div className="absolute -inset-5 rounded-full bg-gradient-to-r from-cyan-500/15 via-blue-500/15 to-teal-500/15 blur-lg opacity-50 animate-spin-reverse"></div>
 
             {/* Pulsing glow */}
-            <div className="absolute -inset-4 rounded-full bg-blue-500/10 animate-pulse-glow"></div>
+            <div className="absolute -inset-4 rounded-full bg-teal-500/10 animate-pulse-glow"></div>
 
             {/* Sparkle orbits */}
             <div className="absolute -inset-6 animate-spin-slow">
-              <Sparkles className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 text-blue-300 animate-twinkle" />
+              <Sparkles className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 text-teal-300 animate-twinkle" />
             </div>
             <div className="absolute -inset-6 animate-spin-reverse" style={{ animationDuration: '4s' }}>
-              <Star className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 text-pink-300 animate-twinkle" style={{ animationDelay: '0.5s' }} />
+              <Star className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2.5 h-2.5 text-cyan-300 animate-twinkle" style={{ animationDelay: '0.5s' }} />
             </div>
             <div className="absolute -inset-6 animate-spin-slow" style={{ animationDuration: '5s' }}>
-              <Zap className="absolute left-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 text-purple-300 animate-twinkle" style={{ animationDelay: '1s' }} />
+              <Zap className="absolute left-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 text-emerald-300 animate-twinkle" style={{ animationDelay: '1s' }} />
             </div>
 
             {/* Rocket Container with shimmer effect */}
-            <div className="rocket-inner relative p-3.5 rounded-full shadow-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-600 border-2 border-white/30 transition-all duration-150 overflow-hidden">
+            <div className="rocket-inner relative p-3.5 rounded-full shadow-2xl bg-gradient-to-br from-blue-500 via-teal-500 to-cyan-600 border-2 border-white/30 transition-all duration-150 overflow-hidden">
               {/* Shimmer overlay */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
 
@@ -275,14 +275,14 @@ export default function FlyingRocket({ onCatch }: FlyingRocketProps) {
             {/* Enhanced Tooltip with animation */}
             {showTooltip && !missed && (
               <div className="absolute -top-16 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap animate-float">
-                <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-4 py-2 rounded-full shadow-2xl border-2 border-white/30">
+                <div className="relative bg-gradient-to-r from-blue-600 via-teal-600 to-cyan-600 px-4 py-2 rounded-full shadow-2xl border-2 border-white/30">
                   <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-full"></div>
                   <span className="relative text-xs font-bold text-white flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
                     Catch me!
                     <Star className="w-3.5 h-3.5 animate-pulse" />
                   </span>
-                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-pink-600"></div>
+                  <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent border-t-cyan-600"></div>
                 </div>
               </div>
             )}
@@ -302,7 +302,7 @@ export default function FlyingRocket({ onCatch }: FlyingRocketProps) {
       {/* Enhanced Speed Indicator */}
       {speedBoost && (
         <div className="fixed top-4 right-4 z-[100] animate-speed-enter">
-          <div className="relative bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 px-4 py-2 rounded-full shadow-2xl border-2 border-white/30 animate-pulse-fast">
+          <div className="relative bg-gradient-to-r from-cyan-500 via-teal-500 to-emerald-500 px-4 py-2 rounded-full shadow-2xl border-2 border-white/30 animate-pulse-fast">
             <div className="absolute inset-0 bg-white/20 rounded-full animate-shimmer"></div>
             <span className="relative text-white font-bold text-sm flex items-center gap-2">
               <Zap className="w-4 h-4 animate-bounce" />
