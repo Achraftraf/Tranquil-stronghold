@@ -1,35 +1,27 @@
-"use client"
-
-import React from 'react';
-
-interface Props {
-    title: string,
-    icon: React.ReactElement<{ className?: string }>,
-    content: string,
-    href: string,
-}
-
-const ContactLinkItem: React.FC<Props> = ({ title, icon, content, href }) => {
+const ContactLinkItem = ({
+  icon,
+  content,
+  href,
+}: {
+  icon: React.ReactNode;
+  content: string;
+  href: string;
+}) => {
   return (
-    <div className="bg-white border border-gray-200 py-4 px-6 hover:shadow-sm transition-all"> 
-        <div className="flex flex-col items-start gap-2">
-            <div className="flex items-center gap-2">
-                <span className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                    {icon && React.cloneElement(icon, { className: 'w-6 h-6 text-blue-600' })}
-                </span>
-                <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
-            </div>
-            <div> 
-               <a
-                href={href} 
-                className="text-gray-600 hover:text-blue-700 text-sm transition-colors"
-                >
-                    {content}
-                </a>
-            </div>
-        </div>
-    </div>
-  )
-}
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      className="group flex items-center gap-1.5 px-2 py-1.5 rounded-md hover:bg-gray-100 transition-all duration-200"
+    >
+      <div className="text-gray-500 group-hover:text-gray-900 transition-colors duration-200">
+        {icon}
+      </div>
+      <span className="text-xs text-gray-500 group-hover:text-gray-900 transition-colors duration-200">
+        {content}
+      </span>
+    </a>
+  );
+};
 
 export default ContactLinkItem;
