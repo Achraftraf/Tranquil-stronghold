@@ -8,6 +8,8 @@ import { EventCardSkeleton } from "@/components/event-card-skeleton";
 import { FeaturedEvent } from "@/components/featured-event"; // Remove eventsData import
 import { getEvents } from "@/lib/strapi"; // Import Event type
 import { Event } from "@/types";
+import { ParticleBackground } from "@/components/particle-background";
+import Link from 'next/link'
 
 export default function Events() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -41,6 +43,7 @@ export default function Events() {
 
   return (
     <section className="w-full min-h-screen bg-white text-black max-w-5xl mx-auto px-8">
+    <ParticleBackground/>
       <AnimatedSection delay={0.1} classNames="max-w-5xl mx-auto text-center py-10 flex flex-col items-center">
         <span className="mb-6 inline-flex items-center justify-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-bold tracking-wide text-blue-600 ring-1 ring-inset ring-blue-600/20 transition-all hover:bg-blue-100 hover:scale-105 cursor-default shadow-sm">
           <span className="relative flex h-2.5 w-2.5">
@@ -58,14 +61,14 @@ export default function Events() {
           Join us in celebrating youth creativity through art, film, and music.
           Every event is a chance to learn, create, and connect.
         </p>
-      </AnimatedSection>
 
-      {/* Featured Event */}
       {!loading && featuredEvent && (
         <div className="w-full mx-auto px-6 py-8">
           <FeaturedEvent event={featuredEvent} />
         </div>
       )}
+      </AnimatedSection>
+
 
       {/* Filter Section */}
       <div className="max-w-7xl mx-auto px-6 py-4">
@@ -101,7 +104,6 @@ export default function Events() {
         </AnimatedSection>
       </div>
 
-      {/* Events Grid */}
       <div className="max-w-7xl mx-auto px-6 pb-8">
         {loading ? (
           // Show skeletons while loading
@@ -118,16 +120,16 @@ export default function Events() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-500  border border-dashed rounded-3xl">
             No events found in this category.
           </div>
         )}
       </div>
 
-      {/* CTA Section */}
+
       <AnimatedSection delay={0.6}>
-        <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="relative overflow-hidden rounded-[3rem] bg-white p-8 md:p-16 text-center shadow-[0_30px_100px_-20px_rgba(59,130,246,0.15),0_10px_40px_-10px_rgba(0,0,0,0.05)] ring-1 ring-blue-900/5 isolation-auto">
+        <div className="max-w-7xl mx-auto px-6 py-14">
+          <div className="relative overflow-hidden rounded-[3rem] bg-white p-8 md:p-16 text-center ring-1 ring-blue-900/20 isolation-auto">
 
             {/* Dynamic brand background effects */}
             <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[40rem] h-[40rem] bg-gradient-to-br from-blue-100/50 via-teal-100/40 to-cyan-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow mix-blend-multiply"></div>
@@ -135,33 +137,31 @@ export default function Events() {
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-plus-darker pointer-events-none"></div>
 
             <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-gray-900 leading-tight">
-                Don't See What <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 bg-clip-text text-transparent decoration-clone pr-2 pb-1">You're Looking For?</span>
+              <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-gray-900">
+                Want to <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 bg-clip-text text-transparent decoration-clone pr-2 pb-1">Collaborate?</span>
               </h2>
 
               <p className="text-xl mb-10 text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium">
-                Stay updated with our latest events and programs by following us on social media
-                or subscribing to our newsletter.
+                We're always looking for partners, mentors, and supporters who believe in
+                empowering Memphis youth through creative expression.
               </p>
 
               <div className="flex flex-wrap gap-5 justify-center">
                 <a
-                  href="https://www.instagram.com/thesfhaven"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-teal-400 px-10 text-base font-bold text-white shadow-[0_10px_30px_-5px_rgba(37,99,235,0.4)] transition-all hover:shadow-[0_20px_40px_-5px_rgba(37,99,235,0.5)] hover:scale-[1.02]"
+                  className="group relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-teal-400 px-10 text-base font-bold text-white hover:border hover:border-blue-500"
                 >
-                  <span className="relative z-10">Follow Us</span>
+                  <span className="relative z-10">Get Involved</span>
                 </a>
 
-                <a
-                  href="https://www.eventbrite.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/contact"
                   className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-10 text-base font-bold text-gray-700 shadow-sm transition-all hover:border-blue-200 hover:bg-blue-50/50 hover:text-blue-700 hover:scale-[1.02]"
                 >
-                  Subscribe
-                </a>
+                  Contact Us
+                </Link>
               </div>
             </div>
           </div>
