@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { AnimatedSection } from "./animations/animated-section";
 import { Event } from "@/types";
 import { Calendar, Clock, MapPin } from "lucide-react";
 
@@ -7,8 +6,7 @@ export const FeaturedEvent = ({ event }: { event: Event }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
-    <AnimatedSection delay={0.2} classNames="w-full">
-      <div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl overflow-hidden shadow-xl">
+      <div className="w-full text-start relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl overflow-hidden shadow-md">
         <div className="absolute inset-0 opacity-40">
           <img
             src={event.image}
@@ -45,12 +43,14 @@ export const FeaturedEvent = ({ event }: { event: Event }) => {
               <span>{event.location}</span>
             </div>
           </div>
-
-          <button className="bg-white text-gray-900 px-8 py-3 rounded-full font-semibold text-lg hover:bg-teal-50 transition-all shadow-lg hover:shadow-xl hover:text-teal-600">
+          <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSc7sCv5f35LvLNNqXc_XzK2fNKGMniHx3hmFkwZHve0IOpAew/viewform?usp=dialog"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-white text-gray-900 px-8 py-3 rounded-full font-semibold text-lg hover:bg-teal-50 transition-all shadow-lg hover:shadow-xl hover:text-teal-600">
             Register Now
-          </button>
+          </a>
         </div>
       </div>
-    </AnimatedSection>
   );
 };

@@ -91,7 +91,7 @@ export default function Home() {
             </h2>
             <div className="flex items-center gap-4 mt-4">
               <Link
-                href="/team"
+                href="/events#join-us"
                 className="text-xl px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-teal-500/30 transition border-none"
               >
                 Join Us
@@ -212,10 +212,10 @@ export default function Home() {
 
         <AnimatedSectionH
           delay={0.2}
-          classNames="max-w-5xl mx-auto w-full px-6 bg-white"
+          classNames="max-w-5xl mx-auto w-full px-6 "
         >
-          <div className="max-w-7xl mx-auto px-6 py-24">
-            <div className="relative overflow-hidden rounded-[3rem] bg-white p-8 shadow-[0_30px_100px_-20px_rgba(59,130,246,0.15),0_10px_40px_-10px_rgba(0,0,0,0.05)] ring-1 ring-blue-900/5 sm:p-20 md:p-24 isolation-auto">
+          <div className="max-w-7xl mx-auto px-6 py-14">
+            <div className="relative overflow-hidden rounded-[3rem] bg-white p-8  ring-1 ring-blue-900/15 sm:p-20 md:p-24 isolation-auto">
 
               {/* Dynamic brand background effects */}
               <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[50rem] h-[50rem] bg-gradient-to-br from-blue-100/50 via-teal-100/40 to-cyan-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow mix-blend-multiply"></div>

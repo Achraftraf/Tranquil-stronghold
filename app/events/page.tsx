@@ -1,19 +1,35 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { Filter, X } from "lucide-react";
+import { Filter, X, Calendar } from "lucide-react";
 import { AnimatedSection } from "@/components/animations/animated-section";
 import { EventCard } from "@/components/event-card";
 import { EventCardSkeleton } from "@/components/event-card-skeleton";
 import { FeaturedEvent } from "@/components/featured-event"; // Remove eventsData import
 import { getEvents } from "@/lib/strapi"; // Import Event type
 import { Event } from "@/types";
+import { ParticleBackground } from "@/components/particle-background";
+import Link from 'next/link'
 
 export default function Events() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
   const [events, setEvents] = useState<Event[]>([]); // Now no conflict
   const [loading, setLoading] = useState(true); // Fixed typo: laoding -> loading
+  const [rsvpFormData, setRsvpFormData] = useState({
+    name: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    attendees: "",
+    dietary: "",
+    message: "",
+  });
+  const [isSubmittingRsvp, setIsSubmittingRsvp] = useState(false);
+  const [rsvpStatus, setRsvpStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
     async function fetchEvents() {
@@ -38,9 +54,71 @@ export default function Events() {
     ? events.filter(e => !e.featured) // Exclude featured from main list
     : events.filter(e => e.category === selectedCategory && !e.featured);
 
+  const handleRsvpChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    setRsvpFormData({
+      ...rsvpFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleRsvpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmittingRsvp(true);
+    setRsvpStatus(null);
+
+    try {
+      let fullMessage = "RSVP Registration Details:\n\n";
+      fullMessage += `Name: ${rsvpFormData.name} ${rsvpFormData.lastName}\n`;
+      fullMessage += `Email: ${rsvpFormData.email}\n`;
+      if (rsvpFormData.phone) fullMessage += `Phone: ${rsvpFormData.phone}\n`;
+      if (rsvpFormData.attendees) fullMessage += `Number of Attendees: ${rsvpFormData.attendees}\n`;
+      if (rsvpFormData.dietary) fullMessage += `Dietary Restrictions: ${rsvpFormData.dietary}\n`;
+      if (rsvpFormData.message) fullMessage += `\nAdditional Notes:\n${rsvpFormData.message}`;
+
+      const response = await fetch("/.netlify/functions/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: rsvpFormData.name,
+          lastName: rsvpFormData.lastName,
+          email: rsvpFormData.email,
+          message: fullMessage,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setRsvpStatus({
+          type: "success",
+          message: "RSVP submitted successfully! We'll confirm your registration soon.",
+        });
+        setRsvpFormData({ name: "", lastName: "", email: "", phone: "", attendees: "", dietary: "", message: "" });
+      } else {
+        setRsvpStatus({
+          type: "error",
+          message: data.message || "Something went wrong. Please try again.",
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting RSVP:", error);
+      setRsvpStatus({
+        type: "error",
+        message: "Failed to submit RSVP. Please try again later.",
+      });
+    } finally {
+      setIsSubmittingRsvp(false);
+    }
+  };
+
 
   return (
     <section className="w-full min-h-screen bg-white text-black max-w-5xl mx-auto px-8">
+    <ParticleBackground/>
       <AnimatedSection delay={0.1} classNames="max-w-5xl mx-auto text-center py-10 flex flex-col items-center">
         <span className="mb-6 inline-flex items-center justify-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-bold tracking-wide text-blue-600 ring-1 ring-inset ring-blue-600/20 transition-all hover:bg-blue-100 hover:scale-105 cursor-default shadow-sm">
           <span className="relative flex h-2.5 w-2.5">
@@ -58,14 +136,14 @@ export default function Events() {
           Join us in celebrating youth creativity through art, film, and music.
           Every event is a chance to learn, create, and connect.
         </p>
-      </AnimatedSection>
 
-      {/* Featured Event */}
       {!loading && featuredEvent && (
         <div className="w-full mx-auto px-6 py-8">
           <FeaturedEvent event={featuredEvent} />
         </div>
       )}
+      </AnimatedSection>
+
 
       {/* Filter Section */}
       <div className="max-w-7xl mx-auto px-6 py-4">
@@ -101,7 +179,6 @@ export default function Events() {
         </AnimatedSection>
       </div>
 
-      {/* Events Grid */}
       <div className="max-w-7xl mx-auto px-6 pb-8">
         {loading ? (
           // Show skeletons while loading
@@ -118,55 +195,141 @@ export default function Events() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 text-gray-500">
+          <div className="text-center py-12 text-gray-500  border border-dashed rounded-3xl">
             No events found in this category.
           </div>
         )}
       </div>
 
-      {/* CTA Section */}
       <AnimatedSection delay={0.6}>
-        <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="relative overflow-hidden rounded-[3rem] bg-white p-8 md:p-16 text-center shadow-[0_30px_100px_-20px_rgba(59,130,246,0.15),0_10px_40px_-10px_rgba(0,0,0,0.05)] ring-1 ring-blue-900/5 isolation-auto">
+        <div id="join-us" className="w-full mx-auto px-6 pt-10 sm:pt-14 lg:pb-16">
 
-            {/* Dynamic brand background effects */}
-            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[40rem] h-[40rem] bg-gradient-to-br from-blue-100/50 via-teal-100/40 to-cyan-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow mix-blend-multiply"></div>
-            <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[35rem] h-[35rem] bg-gradient-to-tr from-cyan-100/50 via-blue-100/40 to-teal-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow [animation-delay:2s] mix-blend-multiply"></div>
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-plus-darker pointer-events-none"></div>
+          <div className="text-center mb-8">
+            <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tight text-gray-900">
+              RSVP for an <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 bg-clip-text text-transparent">Event</span>
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium">
+              Reserve your spot at one of our upcoming events. We'll send you a confirmation shortly.
+            </p>
+          </div>
+          <div className="relative overflow-hidden rounded-3xl bg-white p-10 md:p-14 text-center ring-1 ring-blue-900/20 isolation-auto  z-10">
 
-            <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-gray-900 leading-tight">
-                Don't See What <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 bg-clip-text text-transparent decoration-clone pr-2 pb-1">You're Looking For?</span>
-              </h2>
-
-              <p className="text-xl mb-10 text-gray-600 max-w-2xl mx-auto leading-relaxed font-medium">
-                Stay updated with our latest events and programs by following us on social media
-                or subscribing to our newsletter.
-              </p>
-
-              <div className="flex flex-wrap gap-5 justify-center">
-                <a
-                  href="https://www.instagram.com/thesfhaven"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative inline-flex h-14 items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-teal-400 px-10 text-base font-bold text-white shadow-[0_10px_30px_-5px_rgba(37,99,235,0.4)] transition-all hover:shadow-[0_20px_40px_-5px_rgba(37,99,235,0.5)] hover:scale-[1.02]"
-                >
-                  <span className="relative z-10">Follow Us</span>
-                </a>
-
-                <a
-                  href="https://www.eventbrite.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-10 text-base font-bold text-gray-700 shadow-sm transition-all hover:border-blue-200 hover:bg-blue-50/50 hover:text-blue-700 hover:scale-[1.02]"
-                >
-                  Subscribe
-                </a>
+            {rsvpStatus && (
+              <div
+                className={`p-4 rounded-xl text-sm mb-6 animate-slide-down ${
+                  rsvpStatus.type === "success"
+                    ? "bg-teal-50 text-teal-800 border border-teal-300"
+                    : "bg-red-50 text-red-800 border border-red-200"
+                }`}
+              >
+                {rsvpStatus.message}
               </div>
-            </div>
+            )}
+
+            <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[40rem] h-[40rem] bg-gradient-to-br from-blue-100/50 via-teal-100/40 to-cyan-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow mix-blend-multiply -z-10"></div>
+            <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[35rem] h-[35rem] bg-gradient-to-tr from-cyan-100/50 via-blue-100/40 to-teal-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow [animation-delay:2s] mix-blend-multiply -z-10"></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-plus-darker pointer-events-none -z-10"></div>
+
+              <form onSubmit={handleRsvpSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <input
+                    type="text"
+                    name="name"
+                    value={rsvpFormData.name}
+                    onChange={handleRsvpChange}
+                    placeholder="First Name *"
+                    className="px-4 py-3 bg-white/80 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all text-base placeholder:text-gray-400"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={rsvpFormData.lastName}
+                    onChange={handleRsvpChange}
+                    placeholder="Last Name *"
+                    className="px-4 py-3 bg-white/80 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all text-base placeholder:text-gray-400"
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <input
+                    type="email"
+                    name="email"
+                    value={rsvpFormData.email}
+                    onChange={handleRsvpChange}
+                    placeholder="Email Address *"
+                    className="px-4 py-3 bg-white/80 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all text-base placeholder:text-gray-400"
+                    required
+                  />
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={rsvpFormData.phone}
+                    onChange={handleRsvpChange}
+                    placeholder="Phone Number"
+                    className="px-4 py-3 bg-white/80 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all text-base placeholder:text-gray-400"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  <input
+                    type="number"
+                    name="attendees"
+                    value={rsvpFormData.attendees}
+                    onChange={handleRsvpChange}
+                    placeholder="Number of Attendees"
+                    min="1"
+                    className="px-4 py-3 bg-white/80 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all text-base placeholder:text-gray-400"
+                  />
+                  <input
+                    type="text"
+                    name="dietary"
+                    value={rsvpFormData.dietary}
+                    onChange={handleRsvpChange}
+                    placeholder="Dietary Restrictions (if any)"
+                    className="px-4 py-3 bg-white/80 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all text-base placeholder:text-gray-400"
+                  />
+                </div>
+
+                <textarea
+                  name="message"
+                  value={rsvpFormData.message}
+                  onChange={handleRsvpChange}
+                  rows={4}
+                  placeholder="Additional notes or questions (Optional)"
+                  className="w-full px-4 py-3 bg-white/80 border border-gray-200 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-200 focus:outline-none transition-all text-base resize-none placeholder:text-gray-400"
+                ></textarea>
+
+                <button
+                  type="submit"
+                  disabled={isSubmittingRsvp}
+                  className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-base"
+                >
+                  {isSubmittingRsvp ? "Submitting..." : "Submit RSVP"}
+                </button>
+              </form>
+
           </div>
         </div>
       </AnimatedSection>
+
+      <style jsx>{`
+        @keyframes slide-down {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-slide-down {
+          animation: slide-down 0.5s ease-out;
+        }
+      `}</style>
     </section>
   );
 }
