@@ -103,22 +103,21 @@ export default function Contact() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
                 </span>
                 <span className="text-xs font-bold uppercase tracking-widest text-slate-600">
-                  Contact
+                  Get Involved
                 </span>
               </div>
 
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 leading-[0.9]">
-                Let's <br />
+                Join the <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-teal-500">
-                  Connect
+                  Movement
                 </span>
               </h1>
             </AnimatedSection>
 
             <AnimatedSection delay={0.2} classNames="max-w-md mx-auto lg:mx-0">
               <p className="text-lg text-slate-600 leading-relaxed font-medium">
-                Have a project in mind or just want to say hello?
-                We are ready to bring your ideas to life with pixel-perfect precision.
+                Ready to make a difference? Whether you want to plant trees, mentor others, or support our cause, we'd love to have you on board.
               </p>
             </AnimatedSection>
           </div>
@@ -135,8 +134,8 @@ export default function Contact() {
 
                   {submitStatus && (
                     <div className={`absolute top-0 left-0 right-0 -mt-16 mx-4 p-4 rounded-xl text-sm font-medium text-center animate-slide-down shadow-lg backdrop-blur-md border ${submitStatus.type === 'success'
-                        ? 'bg-teal-50/90 text-teal-800 border-teal-200'
-                        : 'bg-red-50/90 text-red-800 border-red-200'
+                      ? 'bg-teal-50/90 text-teal-800 border-teal-200'
+                      : 'bg-red-50/90 text-red-800 border-red-200'
                       }`}>
                       {submitStatus.message}
                     </div>
@@ -215,7 +214,7 @@ export default function Contact() {
                           onFocus={() => setFocusedField('message')}
                           onBlur={() => setFocusedField(null)}
                           className="w-full bg-transparent border-none p-3.5 pl-3 text-slate-800 placeholder-slate-400 focus:ring-0 text-sm font-semibold resize-none min-h-[120px]"
-                          placeholder="Tell us about your project..."
+                          placeholder="I'd love to help with..."
                           required
                         ></textarea>
                       </div>
