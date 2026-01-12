@@ -13,6 +13,7 @@ interface ParticlesContainerProps {
   linkColor?: string;
   particleCount?: number;
   interactiveMode?: "grab" | "repulse" | "bubble";
+  disabled?: boolean; // Disable interactions when modal is open
 }
 
 const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
@@ -23,6 +24,7 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
   linkColor = "#14b8a6", // Teal-500
   particleCount = 100,
   interactiveMode = "grab",
+  disabled = false,
 }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -89,11 +91,11 @@ const ParticlesContainer: React.FC<ParticlesContainerProps> = ({
           interactivity: {
             events: {
               onHover: {
-                enable: true,
+                enable: !disabled, // Disable hover when modal is open
                 mode: interactiveMode
               },
               onClick: {
-                enable: true,
+                enable: !disabled, // Disable click when modal is open
                 mode: "push"
               },
               resize: { enable: true },

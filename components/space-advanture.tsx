@@ -392,22 +392,82 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden perspective-[1200px]" >
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 overflow-hidden perspective-[1200px]"
+      style={{ pointerEvents: 'auto' }} // Capture all pointer events
+    >
+      {/* Backdrop - non-clickable but blocks all interactions */}
       <div
         className={`absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-700 ${isClosing ? 'opacity-0' : 'opacity-100'}`}
-        onClick={handleCloseClick}
+        style={{ pointerEvents: 'auto' }} // Block clicks to background
       />
+
+      {/* Premium Close Button - Next to Modal on Right */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          handleCloseClick();
+        }}
+        className={`
+          absolute -translate-y-1/2 z-[110] 
+          w-14 h-14 rounded-2xl 
+          bg-white/10 hover:bg-red-500/90 
+          backdrop-blur-xl border-2 border-white/20 hover:border-red-400/50
+          flex items-center justify-center 
+          transition-all duration-500 ease-out
+          hover:scale-110 hover:rotate-90
+          shadow-lg shadow-black/30 hover:shadow-red-500/50 hover:shadow-2xl
+          group
+          ${isClosing ? 'opacity-0 scale-50 rotate-180 pointer-events-none' :
+            isOpening ? 'opacity-0 scale-50 -rotate-90' :
+              'opacity-100 scale-100 rotate-0'}
+        `}
+        style={{
+          left: 'calc(50% + min(48rem, 100vw - 2rem) / 2 + 1.5rem)',
+          top: '15%',
+          animation: !isClosing && !isOpening ? 'fadeInRotate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' : 'none',
+          animationDelay: '0.4s'
+        }}
+        aria-label="Close game"
+      >
+        {/* Animated background glow */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-red-400/0 via-red-500/0 to-red-600/0 group-hover:from-red-400/20 group-hover:via-red-500/30 group-hover:to-red-600/20 transition-all duration-500 blur-xl" />
+
+        {/* Icon with animation */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-white relative z-10 transition-all duration-500 group-hover:scale-110"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" className="origin-center transition-all duration-300 group-hover:stroke-white" />
+          <line x1="6" y1="6" x2="18" y2="18" className="origin-center transition-all duration-300 group-hover:stroke-white" />
+        </svg>
+
+        {/* Pulse ring effect on hover */}
+        <div className="absolute inset-0 rounded-2xl border-2 border-white/40 opacity-0 group-hover:opacity-100 group-hover:scale-150 transition-all duration-700 ease-out" />
+      </button>
 
       <div
         ref={gameArea}
         onMouseMove={(e) => {
+          if (!gameStarted || gameOver) return; // Disable mouse control when game not active
           const rect = gameArea.current?.getBoundingClientRect();
           if (rect) {
             player.current.targetX = ((e.clientX - rect.left) / rect.width) * 100;
             player.current.targetY = ((e.clientY - rect.top) / rect.height) * 100;
           }
         }}
-        onClick={() => gameStarted && !gameOver && shootBullet()}
+        onClick={(e) => {
+          e.stopPropagation(); // Prevent clicks from bubbling
+          gameStarted && !gameOver && shootBullet();
+        }}
         className={`
           relative w-full max-w-3xl h-[85vh] max-h-[750px]
           bg-[#05070a] rounded-[3rem] border border-white/10 overflow-hidden
@@ -854,7 +914,21 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
         .animate-spin-slow {
           animation: spin-slow 3s linear infinite;
         }
+
+        @keyframes fadeInRotate {
+          0% {
+            opacity: 0;
+            transform: scale(0.5) rotate(-90deg);
+          }
+          60% {
+            transform: scale(1.1) rotate(5deg);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+          }
+        }
       `}</style>
-    </div>
+    </div >
   );
 }
