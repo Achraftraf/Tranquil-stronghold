@@ -65,8 +65,11 @@ export default function Home() {
 
   return (
     <section className="w-full flex-1 min-h-0 flex flex-col items-center justify-start bg-white text-black relative">
-      {/* Particles in the background - only on this page */}
-      <ParticlesContainer style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }} />
+      {/* Particles in the background - disabled when game modal is open */}
+      <ParticlesContainer
+        style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}
+        disabled={play}
+      />
 
       <div className="relative z-10 w-full flex-1 min-h-0 flex flex-col items-center justify-start">
         {showRocket && (
