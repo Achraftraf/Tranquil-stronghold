@@ -409,7 +409,7 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
           handleCloseClick();
         }}
         className={`
-          absolute top-1/6 -translate-y-1/2 z-[110] 
+          absolute -translate-y-1/2 z-[110] 
           w-14 h-14 rounded-2xl 
           bg-white/10 hover:bg-red-500/90 
           backdrop-blur-xl border-2 border-white/20 hover:border-red-400/50
@@ -418,12 +418,15 @@ export default function SpaceAdventureGame({ handleClose }: { handleClose?: () =
           hover:scale-110 hover:rotate-90
           shadow-lg shadow-black/30 hover:shadow-red-500/50 hover:shadow-2xl
           group
-          ${isClosing ? 'opacity-0 scale-50 rotate-180' : isOpening ? 'opacity-0 scale-50 -rotate-90' : 'opacity-100 scale-100 rotate-0'}
+          ${isClosing ? 'opacity-0 scale-50 rotate-180 pointer-events-none' :
+            isOpening ? 'opacity-0 scale-50 -rotate-90' :
+              'opacity-100 scale-100 rotate-0'}
         `}
         style={{
-          left: 'calc(50% + min(48rem, 100vw) / 2 + 1rem)', // Position next to modal right edge
-          animation: isOpening ? 'none' : !isClosing ? 'fadeInRotate 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards' : 'none',
-          opacity: isOpening ? 0 : undefined
+          left: 'calc(50% + min(48rem, 100vw - 2rem) / 2 + 1.5rem)',
+          top: '15%',
+          animation: !isClosing && !isOpening ? 'fadeInRotate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards' : 'none',
+          animationDelay: '0.4s'
         }}
         aria-label="Close game"
       >
