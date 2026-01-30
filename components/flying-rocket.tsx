@@ -18,7 +18,7 @@ export default function FlyingRocket({ onCatch }: FlyingRocketProps) {
   const positionRef = useRef({ x: 50, y: 40 });
   const angleRef = useRef(0);
   const directionRef = useRef(Math.random() * 360);
-  const speedRef = useRef(0.22); // Intermediate speed - perfect balance
+  const speedRef = useRef(0.12); // Reduced base speed for smoothness
   const rafRef = useRef<number | null>(null);
   const timeRef = useRef(0);
   const particleIdRef = useRef(0);
@@ -70,13 +70,13 @@ export default function FlyingRocket({ onCatch }: FlyingRocketProps) {
     timeRef.current += 1;
 
     // Balanced organic movement
-    const wobbleX = Math.sin(timeRef.current * 0.04) * 4 + Math.cos(timeRef.current * 0.06) * 2;
-    const wobbleY = Math.cos(timeRef.current * 0.035) * 4 + Math.sin(timeRef.current * 0.05) * 2;
+    const wobbleX = Math.sin(timeRef.current * 0.04) * 2 + Math.cos(timeRef.current * 0.06) * 1;
+    const wobbleY = Math.cos(timeRef.current * 0.035) * 2 + Math.sin(timeRef.current * 0.05) * 1;
 
     // Moderate direction changes
     directionRef.current +=
-      Math.sin(timeRef.current * 0.004) * 0.6 +
-      Math.cos(timeRef.current * 0.006) * 0.3;
+      Math.sin(timeRef.current * 0.004) * 0.3 +
+      Math.cos(timeRef.current * 0.006) * 0.15;
 
     const rad = (directionRef.current * Math.PI) / 180;
     const nx = positionRef.current.x + Math.cos(rad) * speedRef.current + wobbleX * 0.08;
@@ -88,14 +88,14 @@ export default function FlyingRocket({ onCatch }: FlyingRocketProps) {
     // Optimized bounce with smoother direction change
     if (nx < 8 || nx > 92) {
       directionRef.current = 180 - directionRef.current + (Math.random() - 0.5) * 18;
-      speedRef.current = 0.22 + Math.random() * 0.04; // Maintain balanced speed after bounce
+      speedRef.current = 0.12 + Math.random() * 0.02; // Maintain balanced speed after bounce
       nextX = Math.max(8, Math.min(nx, 92));
       // Only create burst every other bounce to reduce lag
       if (Math.random() > 0.5) createStarBurst(nextX, nextY);
     }
     if (ny < 8 || ny > 82) {
       directionRef.current = -directionRef.current + (Math.random() - 0.5) * 18;
-      speedRef.current = 0.22 + Math.random() * 0.04;
+      speedRef.current = 0.12 + Math.random() * 0.02;
       nextY = Math.max(8, Math.min(ny, 82));
       if (Math.random() > 0.5) createStarBurst(nextX, nextY);
     }
@@ -158,7 +158,7 @@ export default function FlyingRocket({ onCatch }: FlyingRocketProps) {
 
     // Speed boost activation
     if ((missCount + 1) % 2 === 0) {
-      speedRef.current = Math.min(speedRef.current + 0.03, 0.8); // moderate speed boost
+      speedRef.current = Math.min(speedRef.current + 0.015, 0.4); // gentler speed boost
       setSpeedBoost(true);
       setTimeout(() => setSpeedBoost(false), 2000);
     }
