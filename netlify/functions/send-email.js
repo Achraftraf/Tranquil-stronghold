@@ -37,8 +37,8 @@ exports.handler = async (event, context) => {
     });
 
     const mailOptions = {
-      from: '"Contact Form" <alirhou7@gmail.com>',
-      to: "alirhou7@gmail.com",
+      from: `"Contact Form" <${process.env.GMAIL_USER}>`,
+      to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
       replyTo: email,
       subject: `New Contact Form Message from ${name} ${lastName}`,
       html: `
