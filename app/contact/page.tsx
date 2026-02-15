@@ -6,6 +6,7 @@ import { AnimatedSection } from "@/components/animations/animated-section";
 import ContactLinkItem from "@/components/contact-link-item";
 import { SiX } from "react-icons/si";
 import { IoCall } from "react-icons/io5";
+import { ParticleBackground } from "@/components/particle-background";
 
 type SubmitStatus = {
   type: "success" | "error";
@@ -68,8 +69,13 @@ export default function Contact() {
   };
 
   return (
-    <section className="w-full bg-white text-black flex items-center justify-center font-sans py-5">
-      <div className="w-full md:max-w-5xl w-full mx-auto px-8 pt-6">
+    <section className="relative w-full bg-white text-black flex items-center justify-center font-sans py-5 overflow-hidden">
+      {/* Particle Background */}
+      <div className="absolute inset-0 opacity-60">
+        <ParticleBackground />
+      </div>
+
+      <div className="relative w-full md:max-w-5xl w-full mx-auto px-8 pt-6 z-10">
         <AnimatedSection delay={0.1} classNames="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-blue-500">
             Get in Touch
