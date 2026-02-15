@@ -48,84 +48,56 @@ exports.handler = async (event, context) => {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <meta http-equiv="X-UA-Compatible" content="IE=edge">
-          <title>New Contact Message - Steadfast Haven</title>
-          <!--[if mso]>
-          <style type="text/css">
-            body, table, td {font-family: Arial, Helvetica, sans-serif !important;}
-          </style>
-          <![endif]-->
+          <title>New Message - Steadfast Haven</title>
         </head>
-        <body style="margin: 0; padding: 0; background-color: #f0f4f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">
+        <body style="margin: 0; padding: 0; background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;">
           
-          <!-- Preheader Text (Hidden) -->
-          <div style="display: none; max-height: 0; overflow: hidden; opacity: 0;">
-            New message from ${name} ${lastName} - ${email}
-          </div>
-
-          <!-- Main Email Container -->
-          <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #f0f4f8; padding: 50px 20px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f8fafc; padding: 60px 20px;">
             <tr>
               <td align="center">
                 
-                <!-- Email Wrapper -->
-                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="max-width: 640px; background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);">
+                <!-- Main Email Container -->
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);">
                   
-                  <!-- Brand Header -->
+                  <!-- Elegant Header -->
                   <tr>
-                    <td style="background: linear-gradient(135deg, #1e40af 0%, #0891b2 50%, #06b6d4 100%); padding: 50px 40px; text-align: center; position: relative;">
-                      <!-- Decorative Circles -->
-                      <div style="position: absolute; top: -30px; right: -30px; width: 150px; height: 150px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; opacity: 0.6;"></div>
-                      <div style="position: absolute; bottom: -40px; left: -40px; width: 180px; height: 180px; background: rgba(255, 255, 255, 0.08); border-radius: 50%; opacity: 0.5;"></div>
-                      
-                      <!-- Text Logo -->
-                      <div style="position: relative; z-index: 10;">
-                        <h1 style="margin: 0 0 8px 0; font-size: 36px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; text-transform: uppercase; text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
-                          STEADFAST HAVEN
-                        </h1>
-                        <div style="width: 60px; height: 4px; background: linear-gradient(90deg, #22d3ee, #06b6d4); margin: 0 auto 20px auto; border-radius: 2px;"></div>
-                        <p style="margin: 0; font-size: 14px; color: rgba(255, 255, 255, 0.9); font-weight: 500; text-transform: uppercase; letter-spacing: 2px;">
-                          New Contact Message
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <!-- Notification Badge -->
-                  <tr>
-                    <td style="padding: 0 40px;">
-                      <div style="margin-top: -25px; position: relative; z-index: 20;">
-                        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; padding: 12px 24px; border-radius: 50px; display: inline-block; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);">
-                          📬 New Inquiry
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-
-                  <!-- Sender Details Section -->
-                  <tr>
-                    <td style="padding: 40px 40px 30px 40px;">
-                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 16px; border: 2px solid #3b82f6; overflow: hidden;">
+                    <td style="background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%); padding: 60px 48px; text-align: center;">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
-                          <td style="padding: 32px;">
-                            <!-- Section Label -->
-                            <div style="margin-bottom: 20px;">
-                              <span style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">
-                                Sender Details
-                              </span>
+                          <td style="text-align: center;">
+                            <div style="background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 16px; padding: 24px 32px; display: inline-block; margin-bottom: 24px;">
+                              <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: 3px; text-transform: uppercase;">
+                                STEADFAST HAVEN
+                              </h1>
                             </div>
-                            
-                            <!-- Name -->
-                            <h2 style="margin: 0 0 16px 0; font-size: 28px; font-weight: 800; color: #0f172a; letter-spacing: -0.5px; line-height: 1.2;">
+                            <p style="margin: 0; font-size: 15px; color: rgba(255, 255, 255, 0.85); font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;">
+                              New Contact Message
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <!-- Content Area -->
+                  <tr>
+                    <td style="padding: 48px;">
+                      
+                      <!-- Sender Information -->
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 32px;">
+                        <tr>
+                          <td>
+                            <p style="margin: 0 0 8px 0; font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px;">
+                              From
+                            </p>
+                            <h2 style="margin: 0 0 16px 0; font-size: 26px; font-weight: 700; color: #0f172a; line-height: 1.3; letter-spacing: -0.5px;">
                               ${name} ${lastName}
                             </h2>
-                            
-                            <!-- Email -->
                             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                               <tr>
-                                <td style="padding: 12px 20px; background-color: #ffffff; border-radius: 10px; border: 1px solid #bfdbfe;">
-                                  <a href="mailto:${email}" style="color: #2563eb; text-decoration: none; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                                    <span style="font-size: 20px;">✉️</span>
-                                    <span>${email}</span>
+                                <td style="background-color: #f1f5f9; border-radius: 10px; padding: 14px 20px;">
+                                  <a href="mailto:${email}" style="color: #2563eb; text-decoration: none; font-size: 15px; font-weight: 600;">
+                                    ${email}
                                   </a>
                                 </td>
                               </tr>
@@ -133,70 +105,68 @@ exports.handler = async (event, context) => {
                           </td>
                         </tr>
                       </table>
-                    </td>
-                  </tr>
 
-                  <!-- Message Content Section -->
-                  <tr>
-                    <td style="padding: 0 40px 40px 40px;">
-                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0;">
+                      <!-- Divider -->
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 32px;">
                         <tr>
-                          <td style="padding: 32px;">
-                            <!-- Section Label -->
-                            <div style="margin-bottom: 20px;">
-                              <span style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: #ffffff; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">
-                                Message Content
-                              </span>
-                            </div>
-                            
-                            <!-- Message Text -->
-                            <div style="font-size: 17px; color: #1e293b; line-height: 1.8; font-weight: 400; white-space: pre-wrap; padding: 20px; background-color: #ffffff; border-radius: 12px; border-left: 4px solid #6366f1;">
+                          <td style="height: 1px; background: linear-gradient(90deg, transparent 0%, #e2e8f0 50%, transparent 100%);"></td>
+                        </tr>
+                      </table>
+
+                      <!-- Message Content -->
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 40px;">
+                        <tr>
+                          <td>
+                            <p style="margin: 0 0 16px 0; font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px;">
+                              Message
+                            </p>
+                            <div style="font-size: 16px; color: #334155; line-height: 1.8; font-weight: 400; padding: 24px; background-color: #f8fafc; border-radius: 12px; border-left: 3px solid #2563eb;">
 ${message.replace(/\n/g, "<br>")}
                             </div>
                           </td>
                         </tr>
                       </table>
-                    </td>
-                  </tr>
 
-                  <!-- CTA Button Section -->
-                  <tr>
-                    <td style="padding: 0 40px 50px 40px; text-align: center;">
-                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+                      <!-- Reply Button -->
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
-                          <td style="border-radius: 12px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);">
-                            <a href="mailto:${email}?subject=Re:%20Contact%20Form%20Message" style="display: inline-block; padding: 18px 50px; color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">
-                              <span style="font-size: 20px; margin-right: 8px;">↩️</span> Reply to ${name}
-                            </a>
+                          <td align="center">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); border-radius: 12px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);">
+                                  <a href="mailto:${email}?subject=Re:%20Contact%20Form%20Message" style="display: inline-block; padding: 16px 48px; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; letter-spacing: 0.5px;">
+                                    Reply to ${name}
+                                  </a>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       </table>
+
                     </td>
                   </tr>
 
-                  <!-- Metadata & Footer -->
+                  <!-- Footer -->
                   <tr>
-                    <td style="padding: 35px 40px; background: linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%); border-top: 3px solid #e2e8f0;">
-                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <td style="padding: 40px 48px; background-color: #f8fafc; border-top: 1px solid #e2e8f0;">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
-                          <td style="text-align: center; padding-bottom: 20px;">
-                            <p style="margin: 0 0 10px 0; font-size: 14px; color: #475569; font-weight: 600;">
-                              📋 Form Type: <span style="color: #0f172a; font-weight: 700;">${formType}</span>
+                          <td style="text-align: center;">
+                            <p style="margin: 0 0 12px 0; font-size: 13px; color: #64748b; line-height: 1.6;">
+                              <strong style="color: #475569;">Form Type:</strong> ${formType}
                             </p>
-                            <p style="margin: 0; font-size: 13px; color: #64748b;">
-                              Received on ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                            <p style="margin: 0 0 12px 0; font-size: 12px; color: #94a3b8; line-height: 1.5;">
+                              Received: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} at ${new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                             </p>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td style="text-align: center; padding-top: 20px; border-top: 1px solid #cbd5e1;">
-                            <p style="margin: 0 0 12px 0; font-size: 13px; color: #94a3b8; font-weight: 600;">
-                              © ${new Date().getFullYear()} Steadfast Haven · All Rights Reserved
+                            <div style="margin: 16px 0; height: 1px; background-color: #e2e8f0;"></div>
+                            <p style="margin: 0 0 8px 0; font-size: 12px; color: #94a3b8; font-weight: 500;">
+                              © ${new Date().getFullYear()} Steadfast Haven. All Rights Reserved.
                             </p>
                             <p style="margin: 0; font-size: 13px;">
-                              <a href="https://steadfasthaven.netlify.app" style="color: #3b82f6; text-decoration: none; font-weight: 600; margin: 0 8px;">🌐 Website</a>
-                              <span style="color: #cbd5e1;">|</span>
-                              <a href="mailto:admin@steadfasthaven.com" style="color: #3b82f6; text-decoration: none; font-weight: 600; margin: 0 8px;">📧 Support</a>
+                              <a href="https://steadfasthaven.netlify.app" style="color: #2563eb; text-decoration: none; font-weight: 500; margin: 0 8px;">Website</a>
+                              <span style="color: #cbd5e1;">•</span>
+                              <a href="mailto:admin@steadfasthaven.com" style="color: #2563eb; text-decoration: none; font-weight: 500; margin: 0 8px;">Support</a>
                             </p>
                           </td>
                         </tr>
@@ -206,13 +176,13 @@ ${message.replace(/\n/g, "<br>")}
 
                 </table>
 
-                <!-- Bottom Disclaimer -->
-                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="640" style="max-width: 640px; margin-top: 24px;">
+                <!-- Disclaimer -->
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin-top: 24px;">
                   <tr>
-                    <td style="padding: 0 20px; text-align: center;">
+                    <td style="text-align: center; padding: 0 20px;">
                       <p style="margin: 0; font-size: 12px; color: #94a3b8; line-height: 1.6;">
-                        This is an automated notification from your website contact form.<br>
-                        Please reply directly to <strong>${email}</strong> to respond to this inquiry.
+                        This is an automated notification from your contact form.<br>
+                        Reply directly to <strong style="color: #64748b;">${email}</strong> to respond.
                       </p>
                     </td>
                   </tr>
