@@ -7,6 +7,11 @@ import ContactLinkItem from "@/components/contact-link-item";
 import { SiX } from "react-icons/si";
 import { IoCall } from "react-icons/io5";
 
+type SubmitStatus = {
+  type: "success" | "error";
+  message: string;
+} | null;
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -15,9 +20,9 @@ export default function Contact() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus(null);
@@ -55,7 +60,7 @@ export default function Contact() {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -79,11 +84,10 @@ export default function Contact() {
           <AnimatedSection delay={0.2} classNames="mb-4">
             {submitStatus && (
               <div
-                className={`p-4 text-sm ${
-                  submitStatus.type === "success"
-                    ? "bg-green-50 text-green-800 border border-green-200"
-                    : "bg-red-50 text-red-800 border border-red-200"
-                } mb-4`}
+                className={`p-4 text-sm ${submitStatus.type === "success"
+                  ? "bg-green-50 text-green-800 border border-green-200"
+                  : "bg-red-50 text-red-800 border border-red-200"
+                  } mb-4`}
               >
                 {submitStatus?.message}
               </div>
@@ -94,7 +98,7 @@ export default function Contact() {
               <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[40rem] h-[40rem] bg-gradient-to-br from-blue-100/50 via-teal-100/40 to-cyan-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow mix-blend-multiply -z-10"></div>
               <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-[35rem] h-[35rem] bg-gradient-to-tr from-cyan-100/50 via-blue-100/40 to-teal-100/30 rounded-full blur-3xl opacity-70 animate-pulse-slow [animation-delay:2s] mix-blend-multiply -z-10"></div>
               <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-plus-darker pointer-events-none -z-10"></div>
-              <div className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-10">
                   <div>
                     <label
@@ -169,39 +173,35 @@ export default function Contact() {
                 </div>
 
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   disabled={isSubmitting}
                   className="w-full bg-blue-500 text-white py-4 font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all inline-flex items-center justify-center gap-2 rounded-xl"
                 >
                   <Send className="w-4 h-4" />
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
-              </div>
+              </form>
             </div>
           </AnimatedSection>
 
           <AnimatedSection delay={0.3} classNames="w-full mx-auto">
             <div className="flex flex-row justify-between items-center">
               <ContactLinkItem
-                title="Email"
                 icon={<Mail className="w-6 h-6 text-blue-600" />}
                 content="admin@steadfasthaven.com"
                 href="mailto:admin@steadfasthaven.com"
               />
               <ContactLinkItem
-                title="Instagram"
                 icon={<Instagram className="w-6 h-6 text-blue-600" />}
                 content="@thesfhaven"
                 href="https://instagram.com/thesfhaven"
               />
               <ContactLinkItem
-                title="Phone call"
                 icon={<IoCall className="w-6 h-6 text-blue-600" />}
                 content="+19016022176"
                 href="https://x.com/steadfasthaven1"
               />
               <ContactLinkItem
-                title="X Platform"
                 icon={<SiX className="w-6 h-6 text-blue-600" />}
                 content="@steadfasthaven1"
                 href="https://x.com/steadfasthaven1"
