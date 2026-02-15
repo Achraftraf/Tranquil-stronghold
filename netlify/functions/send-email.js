@@ -65,11 +65,8 @@ exports.handler = async (event, context) => {
                       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                         <tr>
                           <td style="text-align: center;">
-                            <div style="background-color: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 16px; padding: 24px 32px; display: inline-block; margin-bottom: 24px;">
-                              <h1 style="margin: 0; font-size: 28px; font-weight: 700; color: #ffffff; letter-spacing: 3px; text-transform: uppercase;">
-                                STEADFAST HAVEN
-                              </h1>
-                            </div>
+                            <!-- Logo Image -->
+                            <img src="https://steadfasthaven.netlify.app/logo.png" alt="Steadfast Haven" style="width: 180px; height: auto; display: block; margin: 0 auto 24px auto; max-width: 100%;">
                             <p style="margin: 0; font-size: 15px; color: rgba(255, 255, 255, 0.85); font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;">
                               New Contact Message
                             </p>
