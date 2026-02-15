@@ -9,9 +9,17 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    const { name, lastName, email, message } = JSON.parse(event.body);
+    const { name, lastName, email, message, formType } = JSON.parse(event.body);
 
-    if (!name || !lastName || !email || !message) {
+    console.log("Received form data:", {
+      name,
+      lastName,
+      email,
+      message,
+      formType,
+    });
+
+    if (!name || !lastName || !email || !message || !formType) {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: "All fields are required" }),
@@ -91,7 +99,7 @@ exports.handler = async (event, context) => {
                   <tr>
                     <td style="padding: 32px 48px; background-color: #fbfbfd; border-top: 1px solid #d2d2d7;">
                       <p style="margin: 0; font-size: 13px; color: #86868b; line-height: 1.5;">
-                        This message was sent from your website contact form.
+                        This message was sent from your website ${formType} form.
                       </p>
                     </td>
                   </tr>
@@ -113,7 +121,7 @@ exports.handler = async (event, context) => {
         ${message}
 
         ---
-        This message was sent from your website contact form.
+        This message was sent from your website ${formType} form.
       `,
     };
 
